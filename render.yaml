@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: general-travel-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DB_HOST
+        fromDatabase:
+          name: general-travel-db
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: general-travel-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: general-travel-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: general-travel-db
+          property: database
+
+databases:
+  - name: general-travel-db
+    databaseName: general_travel
+    user: general_travel_user 

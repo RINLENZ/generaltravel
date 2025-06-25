@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche - Multi-services</title>
+    <link rel="stylesheet" href="assets/style/style1.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/vendor/boxicons/css/boxicons.min.css">
+    <link rel="stylesheet" href="assets/vendor/aos/aos.css">
+    <link rel="stylesheet" href="assets/vendor/glightbox/css/glightbox.min.css">
+    <link rel="stylesheet" href="assets/vendor/remixicon/remixicon.css">
+    <link rel="stylesheet" href="assets/vendor/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="assets/style/style.css">
+    <style>
+      html, body {
+        height: 100%;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex: 1 0 auto;
+      }
+      #footer {
+        flex-shrink: 0;
+      }
+      .btn-primary, .bg-primary {
+        background-color: #0a1931 !important;
+        border-color: #0a1931 !important;
+      }
+      .btn-primary:hover, .bg-primary-dark {
+        background-color: #e6b800 !important;
+        border-color: #e6b800 !important;
+        color: #0a1931 !important;
+      }
+      .card {
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px #0001;
+      }
+      .badge.bg-secondary, .option-badge {
+        background: #e6b800 !important;
+        color: #0a1931 !important;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        margin-right: 0.25rem;
+      }
+      .text-primary { color: #e6b800 !important; }
+      .display-3 { font-size: 3rem; }
+    </style>
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container">
+            <div class="header-container d-flex align-items-center justify-content-between">
+                <div class="logo">
+                    <h1 class="text-light"><a href="index.html"><span>GENERAL TRAVEL</span></a></h1>
+                </div>
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        <li><a class="nav-link scrollto active" href="index.html#hero">Accueil</a></li>
+                        <li><a class="nav-link scrollto" href="index.html#about">À propos</a></li>
+                        <li><a class="nav-link scrollto" href="index.html#services">Services</a></li>
+                        <li><a class="nav-link scrollto " href="index.html#portfolio">Destination</a></li>
+                        <li class="dropdown"><a href="#"><span>Reservations</span> <i class="bi bi-chevron-down"></i></a>
+                            <ul>
+                                <li><a href="#">Billets de Bus</a></li>
+                                <li><a href="#">Location Voiture</a></li>
+                                <li><a href="#">Reservation Hotel</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="nav-link scrollto" href="index.html#contact">Contact</a></li>
+                        <li><a class="getstarted scrollto" href="index.html#about">Commencer</a></li>
+                    </ul>
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- End Header -->
+    <main style="margin-top: 100px;">
+        <div class="buttons-container">
+            <button class="nav-button active" data-type="bus">
+                <i class="fas fa-bus"></i>
+                Bus
+            </button>
+            <button class="nav-button" data-type="hotel">
+                <i class="fas fa-hotel"></i>
+                Hôtel
+            </button>
+            <button class="nav-button" data-type="car">
+                <i class="fas fa-car"></i>
+                Voiture
+            </button>
+        </div>
+        <div class="search-container">
+            <div class="search-card">
+                <h2>Où voulez-vous partir ?</h2>
+                <div class="search-form">
+                    <div class="trip-type">
+                        <label>
+                            <input type="radio" name="trip" value="aller-simple" checked>
+                            <span>Aller simple</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="trip" value="aller-retour">
+                            <span>Aller-retour</span>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <select class="destination-select">
+                                <option value="" disabled selected>De...</option>
+                                <option value="CDG">YAOUNDE</option>
+                                <option value="ORY">DOUALA</option>
+                                <option value="NCE">BAFOUSSAM</option>
+                                <option value="MRS">DOUALA (BEPANDA)</option>
+                                <option value="LYS">DOUALA (YASSA)</option>
+                                <option value="TLS">DSCHANG</option>
+                                <option value="BOD">BOUDA</option>
+                            </select>
+                        </div>
+                        <button class="switch-button" aria-label="Permuter les aéroports">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        <div class="input-group">
+                            <select class="destination-select">
+                                <option value="" disabled selected>À...</option>
+                                <option value="JFK">YAOUNDE</option>
+                                <option value="LHR">DOUALA</option>
+                                <option value="DXB">BAFOUSSAM</option>
+                                <option value="HND">DOUALA (BEPANDA)</option>
+                                <option value="SYD">DOUALA (YASSA)</option>
+                                <option value="YYZ">DSCHANG</option>
+                                <option value="GRU">BOUDA</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="date-input" placeholder="Aller" onfocus="this.type='date'" onblur="if(!this.value) this.type='text'">
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="date-input" placeholder="Retour" onfocus="this.type='date'" onblur="if(!this.value) this.type='text'">
+                        </div>
+                        <div class="input-group">
+                            <div class="passenger-dropdown" id="passenger-dropdown">
+                                <button type="button" class="passenger-trigger" onclick="togglePassengerMenu()">
+                                    <span class="passenger-count">1 Adulte, 0 Enfant</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="passenger-content" id="passenger-content">
+                                    <div class="passenger-option">
+                                        <span>Adultes</span>
+                                        <div class="passenger-controls">
+                                            <button type="button" class="btn-passenger" onclick="decrementPassenger('adults')">-</button>
+                                            <span id="adults-count">1</span>
+                                            <button type="button" class="btn-passenger" onclick="incrementPassenger('adults')">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="passenger-option">
+                                        <span>Enfants</span>
+                                        <div class="passenger-controls">
+                                            <button type="button" class="btn-passenger" onclick="decrementPassenger('children')">-</button>
+                                            <span id="children-count">0</span>
+                                            <button type="button" class="btn-passenger" onclick="incrementPassenger('children')">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="search-button">
+                            <i class="fas fa-search"></i>
+                            Rechercher
+                        </button>
+                        <button type="button" id="btnShowAllTripsUser" class="search-button">Voir les trajets</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- ======= Footer (simple) ======= -->
+    <footer id="footer">
+      <div class="container d-md-flex py-4">
+        <div class="me-md-auto text-center text-md-start">
+          <div class="copyright">
+            &copy; Copyright 2025 All rights reserved | By <span><u>SERGE DJIOMO</u>😎</span>
+          </div>
+        </div>
+        <div class="social-links text-center text-md-right pt-3 pt-md-0">
+          <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+          <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+          <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        </div>
+      </div>
+    </footer>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/purecounter/purecounter.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <!-- Template Main JS File -->
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script1.js"></script>
+
+    <!-- Toast container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastZone" style="z-index: 9999;"></div>
+
+    <script>
+// === Réservation dynamique bus ===
+
+// Variables globales
+let selectedTrip = null;
+let selectedSeats = [];
+let seatPrice = 0;
+let occupiedSeats = [];
+let trips = [];
+
+// Ajout des sections dynamiques
+const main = document.querySelector('main');
+const resultsSection = document.createElement('div');
+resultsSection.id = 'resultsSection';
+resultsSection.className = 'container my-4';
+resultsSection.style.display = 'none';
+resultsSection.innerHTML = `
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title mb-4">Trajets disponibles</h4>
+      <div id="tripResults"></div>
+    </div>
+  </div>
+`;
+main.appendChild(resultsSection);
+
+const seatSection = document.createElement('div');
+seatSection.id = 'seatSection';
+seatSection.className = 'container my-4';
+seatSection.style.display = 'none';
+seatSection.innerHTML = `
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title mb-4">Sélection des sièges</h4>
+      <div id="seatMap" class="d-flex flex-wrap gap-2 mb-3"></div>
+      <div id="selectedSeats" class="mb-2"></div>
+      <div class="mb-2">Prix par siège : <span id="seatPrice">0€</span></div>
+      <div class="mb-2">Total : <span id="totalPrice">0€</span></div>
+      <button id="continueBtn" class="btn btn-primary" disabled>Continuer</button>
+    </div>
+  </div>
+`;
+main.appendChild(seatSection);
+
+const bookingSection = document.createElement('div');
+bookingSection.id = 'bookingSection';
+bookingSection.className = 'container my-4';
+bookingSection.style.display = 'none';
+bookingSection.innerHTML = `
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title mb-4">Informations voyageur</h4>
+      <form id="bookingForm">
+        <div class="row g-3">
+          <div class="col-md-6"><input type="text" id="firstName" class="form-control" placeholder="Prénom *" required></div>
+          <div class="col-md-6"><input type="text" id="lastName" class="form-control" placeholder="Nom *" required></div>
+          <div class="col-md-6"><input type="email" id="email" class="form-control" placeholder="Email *" required></div>
+          <div class="col-md-6"><input type="tel" id="phone" class="form-control" placeholder="Téléphone *" required></div>
+          <div class="col-12"><textarea id="comments" class="form-control" placeholder="Commentaires (optionnel)"></textarea></div>
+          <div class="col-12"><button type="submit" class="btn btn-success w-100">Confirmer la réservation</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+`;
+main.appendChild(bookingSection);
+
+const confirmationSection = document.createElement('div');
+confirmationSection.id = 'confirmationSection';
+confirmationSection.className = 'container my-4';
+confirmationSection.style.display = 'none';
+confirmationSection.innerHTML = `
+  <div class="card text-center">
+    <div class="card-body">
+      <div class="text-success display-3 mb-3">✓</div>
+      <h4 class="card-title mb-3">Réservation confirmée !</h4>
+      <div id="confirmationDetails" class="mb-3"></div>
+      <button class="btn btn-primary" onclick="window.location.reload()">Nouvelle réservation</button>
+    </div>
+  </div>
+`;
+main.appendChild(confirmationSection);
+
+// Recherche de trajets (bus)
+document.querySelector('.search-button').addEventListener('click', async function(e) {
+  e.preventDefault();
+  // Récupère les valeurs du formulaire
+  const selects = document.querySelectorAll('.destination-select');
+  const departure = selects[0].value;
+  const destination = selects[1].value;
+  const dateInput = document.querySelectorAll('.date-input')[0];
+  const date = dateInput.value;
+  if (!departure || !destination || !date) {
+    showToast('Veuillez remplir tous les champs obligatoires');
+    return;
+  }
+  if (departure === destination) {
+    showToast('La ville de départ et la destination doivent être différentes');
+    return;
+  }
+  // Appel API backend
+  resultsSection.style.display = '';
+  seatSection.style.display = 'none';
+  bookingSection.style.display = 'none';
+  confirmationSection.style.display = 'none';
+  document.getElementById('tripResults').innerHTML = 'Chargement...';
+  try {
+    const response = await fetch(`http://localhost:3000/api/trips?departure=${departure}&destination=${destination}&date=${date}`);
+    trips = await response.json();
+    if (!trips.length) {
+      document.getElementById('tripResults').innerHTML = '<div>Aucun trajet trouvé.</div>';
+      return;
+    }
+    document.getElementById('tripResults').innerHTML = trips.map(trip => `
+      <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:border-primary transition-colors">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between">
+          <div class="flex-1">
+            <div class="flex items-center space-x-4 mb-2">
+              <div class="text-lg font-semibold">${trip.departure_time.slice(0,5)}</div>
+              <div class="flex-1 border-t border-gray-300 dark:border-gray-600 relative">
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 px-2 text-sm text-gray-500">
+                  ${trip.duration}
+                </div>
+              </div>
+              <div class="text-lg font-semibold">${trip.arrival_time.slice(0,5)}</div>
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              ${trip.departure.charAt(0).toUpperCase() + trip.departure.slice(1)} → ${trip.destination.charAt(0).toUpperCase() + trip.destination.slice(1)}
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="text-sm font-medium">${trip.company}</span>
+              <div class="flex space-x-2">
+                ${trip.features.map(feature => `<span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">${feature}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 sm:mt-0 sm:ml-6 text-right">
+            <div class="text-xl font-bold text-primary">${formatCFA(trip.price)}</div>
+            <button onclick="selectTrip(${trip.id}, ${trip.price})" class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-md text-sm font-medium transition-colors mt-2">
+              Sélectionner
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    // Expose la fonction globalement pour le bouton
+    window.selectTrip = selectTrip;
+  } catch (err) {
+    document.getElementById('tripResults').innerHTML = '<div>Erreur lors de la recherche.</div>';
+  }
+});
+
+// Sélection d'un trajet et récupération des sièges occupés
+async function selectTrip(tripId, price) {
+  selectedTrip = tripId;
+  seatPrice = price;
+  selectedSeats = [];
+  // Récupère la date du formulaire ou du trajet sélectionné
+  const date = document.getElementById('travelDate')?.value || (trips?.find?.(t => t.id === tripId)?.date) || '';
+  if (!date) {
+    showToast('Veuillez sélectionner une date.');
+    return;
+  }
+  try {
+    const response = await fetch(`http://localhost:3000/api/trips/${tripId}/seats?date=${date}`);
+    let seats = await response.json();
+    if (!Array.isArray(seats)) seats = [];
+    occupiedSeats = seats;
+  } catch (e) {
+    occupiedSeats = [];
+  }
+  generateSeatMap();
+  seatSection.style.display = '';
+  bookingSection.style.display = 'none';
+  confirmationSection.style.display = 'none';
+  seatSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Génération du plan de sièges
+function generateSeatMap() {
+  const seatMap = document.getElementById('seatMap');
+  const seatPriceElement = document.getElementById('seatPrice');
+  seatPriceElement.textContent = formatCFA(seatPrice);
+  let seatHTML = '';
+  for (let i = 1; i <= 40; i++) {
+    const isOccupied = occupiedSeats.includes(i);
+    seatHTML += `
+      <div class="seat btn btn-sm ${isOccupied ? 'btn-danger disabled' : 'btn-outline-success'} mb-1" style="width:40px;" ${!isOccupied ? `onclick="toggleSeat(${i})"` : ''} id="seat-${i}">${i}</div>
+    `;
+  }
+  seatMap.innerHTML = seatHTML;
+  window.toggleSeat = toggleSeat;
+  updateSeatSummary();
+}
+
+// Sélection/désélection de siège
+function toggleSeat(seatNumber) {
+  const seatElement = document.getElementById(`seat-${seatNumber}`);
+  const passengers = getPassengerCount();
+  if (selectedSeats.includes(seatNumber)) {
+    selectedSeats = selectedSeats.filter(s => s !== seatNumber);
+    seatElement.classList.remove('btn-primary');
+    seatElement.classList.add('btn-outline-success');
+  } else {
+    if (selectedSeats.length >= passengers) {
+      showToast(`Vous ne pouvez sélectionner que ${passengers} siège(s)`);
+      return;
+    }
+    selectedSeats.push(seatNumber);
+    seatElement.classList.remove('btn-outline-success');
+    seatElement.classList.add('btn-primary');
+  }
+  updateSeatSummary();
+}
+
+function updateSeatSummary() {
+  const selectedSeatsElement = document.getElementById('selectedSeats');
+  const totalPriceElement = document.getElementById('totalPrice');
+  const continueBtn = document.getElementById('continueBtn');
+  if (selectedSeats.length === 0) {
+    selectedSeatsElement.innerHTML = '<div class="text-muted">Aucun siège sélectionné</div>';
+    totalPriceElement.textContent = '0€';
+    continueBtn.disabled = true;
+  } else {
+    selectedSeatsElement.innerHTML = `Sièges sélectionnés : ${selectedSeats.join(', ')}`;
+    totalPriceElement.textContent = formatCFA(selectedSeats.length * seatPrice);
+    continueBtn.disabled = false;
+  }
+}
+
+// Nombre de passagers (adulte+enfant)
+function getPassengerCount() {
+  const adults = parseInt(document.getElementById('adults-count')?.textContent || '1');
+  const children = parseInt(document.getElementById('children-count')?.textContent || '0');
+  return adults + children;
+}
+
+// Continuer vers le formulaire de réservation
+document.getElementById('continueBtn').addEventListener('click', function() {
+  bookingSection.style.display = '';
+  bookingSection.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Soumission du formulaire de réservation
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const firstName = document.getElementById('firstName').value;
+  const lastName = document.getElementById('lastName').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const comments = document.getElementById('comments').value;
+  const tripId = selectedTrip;
+  // Récupère la date du trajet sélectionné
+  let date = document.getElementById('travelDate')?.value || (trips?.find?.(t => t.id === tripId)?.date) || '';
+  if (date && date.includes('T')) date = date.split('T')[0];
+  const seats = selectedSeats;
+  if (!tripId || !date || !seats || !Array.isArray(seats) || seats.length === 0 || !firstName || !lastName || !email) {
+    showToast('Veuillez remplir tous les champs obligatoires et sélectionner au moins un siège.');
+    return;
+  }
+  try {
+    const response = await fetch('http://localhost:3000/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tripId, date, seats, firstName, lastName, email, phone, comments
+      })
+    });
+    const result = await response.json();
+    if (result.success) {
+      showConfirmation(firstName, lastName, email, result.bookingRef);
+    } else {
+      showToast('Erreur lors de la réservation : ' + result.message);
+    }
+  } catch (e) {
+    showToast('Erreur lors de la réservation.');
+  }
+});
+
+// Affichage de la confirmation
+function showConfirmation(firstName, lastName, email, bookingRef) {
+  const confirmationDetails = document.getElementById('confirmationDetails');
+  const selects = document.querySelectorAll('.destination-select');
+  const departure = selects[0].value;
+  const destination = selects[1].value;
+  const date = document.querySelectorAll('.date-input')[0].value;
+  confirmationDetails.innerHTML = `
+    <div class="text-start">
+      <div><b>Référence :</b> ${bookingRef}</div>
+      <div><b>Passager :</b> ${firstName} ${lastName}</div>
+      <div><b>Email :</b> ${email}</div>
+      <div><b>Trajet :</b> ${departure} → ${destination}</div>
+      <div><b>Date :</b> ${new Date(date).toLocaleDateString('fr-FR')}</div>
+      <div><b>Sièges :</b> ${selectedSeats.join(', ')}</div>
+      <div><b>Total :</b> ${formatCFA(selectedSeats.length * seatPrice)}</div>
+    </div>
+  `;
+  resultsSection.style.display = 'none';
+  seatSection.style.display = 'none';
+  bookingSection.style.display = 'none';
+  confirmationSection.style.display = '';
+  confirmationSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Bouton pour voir tous les trajets (user)
+document.getElementById('btnShowAllTripsUser').addEventListener('click', async function() {
+  resultsSection.style.display = '';
+  seatSection.style.display = 'none';
+  bookingSection.style.display = 'none';
+  confirmationSection.style.display = 'none';
+  document.getElementById('tripResults').innerHTML = 'Chargement...';
+  try {
+    const response = await fetch('http://localhost:3000/api/trips');
+    trips = await response.json();
+    if (!trips.length) {
+      document.getElementById('tripResults').innerHTML = '<div>Aucun trajet trouvé.</div>';
+      return;
+    }
+    document.getElementById('tripResults').innerHTML = trips.map(trip => `
+      <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-center">
+        <div>
+          <div><b>${trip.departure_time?.slice(0,5) || ''}</b> → <b>${trip.arrival_time?.slice(0,5) || ''}</b> (${trip.duration})</div>
+          <div>${trip.departure} → ${trip.destination}</div>
+          <div>${trip.company} ${trip.features.map(f => `<span class='badge bg-secondary ms-1'>${f}</span>`).join('')}</div>
+        </div>
+        <div class="text-end">
+          <div class="fw-bold text-primary">${formatCFA(trip.price)}</div>
+          <button class="btn btn-primary mt-2" onclick="window.selectTrip(${trip.id}, ${trip.price})">Sélectionner</button>
+        </div>
+      </div>
+    `).join('');
+    window.selectTrip = selectTrip;
+  } catch (err) {
+    document.getElementById('tripResults').innerHTML = '<div>Erreur lors de la recherche.</div>';
+  }
+});
+
+function formatCFA(val) {
+  return Number(val).toLocaleString('fr-FR') + ' FCFA';
+}
+
+function showToast(message, type='success') {
+  const toastZone = document.getElementById('toastZone');
+  const toast = document.createElement('div');
+  toast.className = `toast align-items-center text-bg-${type} border-0 show`;
+  toast.role = 'alert';
+  toast.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+  toastZone.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+    </script>
+</body>
+</html> 

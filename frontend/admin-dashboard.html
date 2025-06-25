@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord - Admin | General Travel</title>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/style/style1.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/clients/client1.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: #f8f5f2; }
+    .dashboard-header { background: #6d4c2b; color: #fff; padding: 1.5rem 0; position: relative; }
+    .dashboard-header h1 { font-size: 2.2rem; }
+    .dashboard-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #e6b800; }
+    .user-menu { position: absolute; top: 1.5rem; right: 2rem; }
+    .user-menu .dropdown-menu { min-width: 180px; }
+    .dashboard-card { border-radius: 1rem; box-shadow: 0 2px 8px #0001; transition: transform 0.2s; }
+    .dashboard-card:hover { transform: translateY(-5px) scale(1.03); }
+    .dashboard-card .card-title { color: #6d4c2b; }
+    .gold { color: #e6b800; }
+    .admin-table th { background: #6d4c2b; color: #fff; }
+    .admin-table td { background: #fff; }
+    .section-title { font-size: 1.5rem; color: #6d4c2b; margin-bottom: 1rem; }
+    .support-card { background: #f3e9dd; border-radius: 0.5rem; padding: 1rem 1.5rem; }
+    @media (max-width: 767px) {
+      .user-menu { position: static; margin-top: 1rem; text-align: center; }
+    }
+    .btn-primary, .bg-primary {
+      background-color: #0a1931 !important;
+      border-color: #0a1931 !important;
+    }
+    .btn-primary:hover, .bg-primary-dark {
+      background-color: #e6b800 !important;
+      border-color: #e6b800 !important;
+      color: #0a1931 !important;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .badge.bg-secondary, .option-badge {
+      background: #e6b800 !important;
+      color: #0a1931 !important;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      margin-right: 0.25rem;
+    }
+    .text-primary { color: #e6b800 !important; }
+    .display-3 { font-size: 3rem; }
+  </style>
+</head>
+<body>
+  <header class="dashboard-header text-center">
+    <div class="container position-relative">
+      <div class="user-menu dropdown float-end">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="assets/img/clients/client2.png" alt="Avatar" class="dashboard-avatar me-2">
+          <span id="adminEmail">Admin</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+          <li><a class="dropdown-item" href="#">Mon Profil</a></li>
+          <li><a class="dropdown-item" href="#">Paramètres</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Déconnexion</a></li>
+        </ul>
+      </div>
+      <h1>Espace Administrateur</h1>
+      <p>Supervisez l'activité de la plateforme <span class="gold">General Travel</span></p>
+      <nav class="mt-3">
+        <a href="index.html" class="btn btn-outline-light me-2"><i class="bi bi-house"></i> Accueil</a>
+        <a href="#" class="btn btn-outline-light me-2"><i class="bi bi-people"></i> Utilisateurs</a>
+        <a href="#" class="btn btn-outline-light me-2"><i class="bi bi-calendar2-check"></i> Réservations</a>
+        <a href="#" class="btn btn-warning" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container my-5">
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-people display-5 gold mb-2"></i>
+            <h5 class="card-title">Utilisateurs</h5>
+            <p class="display-6" id="totalUsers">0</p>
+            <small class="text-muted">+<span id="recentUsers">0</span> cette semaine</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-calendar2-check display-5 gold mb-2"></i>
+            <h5 class="card-title">Réservations</h5>
+            <p class="display-6" id="totalReservations">0</p>
+            <small class="text-muted">+<span id="recentReservations">0</span> cette semaine</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-cash-coin display-5 gold mb-2"></i>
+            <h5 class="card-title">Revenus</h5>
+            <p class="display-6" id="totalRevenue">0 FCFA</p>
+            <small class="text-muted">+<span id="recentRevenue">0</span> FCFA cette semaine</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-graph-up display-5 gold mb-2"></i>
+            <h5 class="card-title">Taux de conversion</h5>
+            <p class="display-6" id="conversionRate">0%</p>
+            <small class="text-muted"><span id="activeUsers">0</span> utilisateurs actifs</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Nouvelles cartes de statistiques -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card dashboard-card p-4">
+          <h6 class="card-title gold mb-3">Top Destinations</h6>
+          <div id="topDestinationsList">
+            <div class="text-center text-muted">Chargement...</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card dashboard-card p-4">
+          <h6 class="card-title gold mb-3">Répartition par Statut</h6>
+          <canvas id="statusChart" height="200"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card dashboard-card p-4">
+          <h6 class="card-title gold mb-3">Métriques Utilisateurs</h6>
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="border-end">
+                <h4 class="text-primary" id="avgReservationsPerUser">0</h4>
+                <small class="text-muted">Réservations/Utilisateur</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <h4 class="text-success" id="activeUsersCount">0</h4>
+              <small class="text-muted">Utilisateurs Actifs</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-5">
+      <div class="col-lg-6 mb-4">
+        <div class="card dashboard-card p-4">
+          <h2 class="section-title gold">Statistiques globales</h2>
+          <canvas id="adminStatsChart" height="180"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <div class="card dashboard-card p-4">
+          <h2 class="section-title gold">Support & Aide</h2>
+          <div class="support-card">
+            <p><i class="bi bi-question-circle gold"></i> Besoin d'aide ? Consultez la <a href="#">FAQ</a> ou <a href="#">contactez le support</a>.</p>
+            <p><i class="bi bi-chat-dots gold"></i> Chattez en direct avec un conseiller !</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="mb-5">
+      <h2 class="mb-3 gold">Dernières réservations</h2>
+      <!-- Formulaire de création de réservation (admin) -->
+      <form id="createReservationForm" class="row g-2 align-items-end mb-4">
+        <div class="col-md-2">
+          <select class="form-select" id="resType" required>
+            <option value="">Type</option>
+            <option value="Bus">Bus</option>
+            <option value="Hôtel">Hôtel</option>
+            <option value="Voiture">Voiture</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="resDestination" placeholder="Destination" required>
+        </div>
+        <div class="col-md-2">
+          <input type="date" class="form-control" id="resDate" required>
+        </div>
+        <div class="col-md-2">
+          <input type="number" class="form-control" id="resPrix" placeholder="Prix (€)" min="0" step="0.01">
+        </div>
+        <div class="col-md-2">
+          <select class="form-select" id="resStatut">
+            <option value="Confirmée">Confirmée</option>
+            <option value="Annulée">Annulée</option>
+            <option value="Terminée">Terminée</option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <button type="submit" class="btn btn-primary w-100"><i class="bi bi-plus-circle"></i></button>
+        </div>
+      </form>
+      <div class="table-responsive">
+        <table class="table admin-table" id="reservationTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Date <i class="bi bi-arrow-down-up"></i></th>
+              <th onclick="sortTable(1)">Utilisateur <i class="bi bi-arrow-down-up"></i></th>
+              <th onclick="sortTable(2)">Type <i class="bi bi-arrow-down-up"></i></th>
+              <th>Destination</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Rempli dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-3 gold">Gestion des utilisateurs</h2>
+      
+      <!-- Barre de recherche et filtres -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <input type="text" class="form-control" id="userSearch" placeholder="Rechercher par nom ou email...">
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="userRoleFilter">
+            <option value="">Tous les rôles</option>
+            <option value="admin">Administrateurs</option>
+            <option value="user">Utilisateurs</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="userSortBy">
+            <option value="created_at">Plus récents</option>
+            <option value="username">Nom d'utilisateur</option>
+            <option value="email">Email</option>
+            <option value="role">Rôle</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-secondary w-100" onclick="resetUserFilters()">
+            <i class="bi bi-arrow-clockwise"></i> Réinitialiser
+          </button>
+        </div>
+      </div>
+      
+      <!-- Formulaire d'ajout d'utilisateur -->
+      <form id="addUserForm" class="row g-2 align-items-end mb-4">
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="newUsername" placeholder="Nom d'utilisateur" required>
+        </div>
+        <div class="col-md-3">
+          <input type="email" class="form-control" id="newEmail" placeholder="Email" required>
+        </div>
+        <div class="col-md-2">
+          <input type="password" class="form-control" id="newPassword" placeholder="Mot de passe" required>
+        </div>
+        <div class="col-md-2">
+          <select class="form-select" id="newRole" required>
+            <option value="user">Utilisateur</option>
+            <option value="admin">Administrateur</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-success w-100"><i class="bi bi-person-plus"></i> Ajouter</button>
+        </div>
+      </form>
+      
+      <div class="table-responsive">
+        <table class="table admin-table" id="userTable">
+          <thead>
+            <tr>
+              <th onclick="sortUserTable(0)">Email <i class="bi bi-arrow-down-up"></i></th>
+              <th onclick="sortUserTable(1)">Nom d'utilisateur <i class="bi bi-arrow-down-up"></i></th>
+              <th>Rôle</th>
+              <th>Date d'inscription</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Rempli dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Modal édition utilisateur -->
+      <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form id="editUserForm">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Modifier l'utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+              </div>
+              <div class="modal-body">
+                <input type="hidden" id="editUserId">
+                <div class="mb-3">
+                  <label for="editUsername" class="form-label">Nom d'utilisateur</label>
+                  <input type="text" class="form-control" id="editUsername" required>
+                </div>
+                <div class="mb-3">
+                  <label for="editEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="editEmail" required>
+                </div>
+                <div class="mb-3">
+                  <label for="editRole" class="form-label">Rôle</label>
+                  <select class="form-select" id="editRole" required>
+                    <option value="user">Utilisateur</option>
+                    <option value="admin">Administrateur</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="editPassword" class="form-label">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+                  <input type="password" class="form-control" id="editPassword">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- === GESTION DES TRAJETS (ADMIN) === -->
+    <section class="mb-5">
+      <h2 class="mb-3 gold">Gestion des trajets</h2>
+      <button id="btnShowAllTrips" class="btn btn-outline-primary mb-3">Voir tous les trajets</button>
+      <!-- Formulaire d'ajout de trajet -->
+      <form id="addTripForm" class="row g-2 align-items-end mb-4">
+        <div class="col-md-2">
+          <select class="form-select" id="tripDeparture" required>
+            <option value="">Départ...</option>
+            <option value="YAOUNDE">YAOUNDE</option>
+            <option value="DOUALA">DOUALA</option>
+            <option value="BAFOUSSAM">BAFOUSSAM</option>
+            <option value="DSCHANG">DSCHANG</option>
+            <option value="BOUDA">BOUDA</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select class="form-select" id="tripDestination" required>
+            <option value="">Destination...</option>
+            <option value="YAOUNDE">YAOUNDE</option>
+            <option value="DOUALA">DOUALA</option>
+            <option value="BAFOUSSAM">BAFOUSSAM</option>
+            <option value="DSCHANG">DSCHANG</option>
+            <option value="BOUDA">BOUDA</option>
+          </select>
+        </div>
+        <div class="col-md-2"><input type="date" class="form-control" id="tripDate" required></div>
+        <div class="col-md-1"><input type="time" class="form-control" id="tripDepartureTime" required></div>
+        <div class="col-md-1"><input type="time" class="form-control" id="tripArrivalTime" required></div>
+        <div class="col-md-1"><input type="text" class="form-control" id="tripDuration" placeholder="Durée (ex: 4h30)" required></div>
+        <div class="col-md-1"><input type="number" class="form-control" id="tripPrice" placeholder="Prix (FCFA)" required></div>
+        <div class="col-md-2"><input type="text" class="form-control" id="tripFeatures" placeholder="Options (WiFi, Prises...)" ></div>
+        <input type="hidden" id="tripCompany" value="General Travel">
+        <div class="col-12"><button type="submit" class="btn btn-success">Ajouter</button></div>
+      </form>
+      <!-- Tableau des trajets -->
+      <div class="table-responsive">
+        <table class="table admin-table" id="tripTable">
+          <thead>
+            <tr>
+              <th>Départ</th>
+              <th>Destination</th>
+              <th>Date</th>
+              <th>Départ (heure)</th>
+              <th>Arrivée</th>
+              <th>Durée</th>
+              <th>Prix</th>
+              <th>Compagnie</th>
+              <th>Options</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Rempli dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+      <!-- Modal édition trajet -->
+      <div class="modal fade" id="editTripModal" tabindex="-1" aria-labelledby="editTripModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form id="editTripForm">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editTripModalLabel">Modifier le trajet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+              </div>
+              <div class="modal-body row g-2">
+                <input type="hidden" id="editTripId">
+                <div class="col-md-6"><input type="text" class="form-control" id="editTripDeparture" placeholder="Départ" required></div>
+                <div class="col-md-6"><input type="text" class="form-control" id="editTripDestination" placeholder="Destination" required></div>
+                <div class="col-md-6"><input type="date" class="form-control" id="editTripDate" required></div>
+                <div class="col-md-6"><input type="time" class="form-control" id="editTripDepartureTime" required></div>
+                <div class="col-md-6"><input type="time" class="form-control" id="editTripArrivalTime" required></div>
+                <div class="col-md-6"><input type="text" class="form-control" id="editTripDuration" placeholder="Durée" required></div>
+                <div class="col-md-6"><input type="number" class="form-control" id="editTripPrice" placeholder="Prix (€)" required></div>
+                <div class="col-md-6"><input type="text" class="form-control" id="editTripCompany" placeholder="Compagnie" required></div>
+                <div class="col-md-12"><input type="text" class="form-control" id="editTripFeatures" placeholder="Options (WiFi, Prises...)" ></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="text-center py-4" style="background:#6d4c2b;color:#fff;">
+    &copy; 2025 General Travel. Tous droits réservés.
+  </footer>
+  <!-- Toast container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastZone" style="z-index: 9999;"></div>
+  <script>
+    // Affichage de l'email admin et chargement dynamique des données dashboard
+    fetch('http://localhost:3000/profile', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        if (data.logged && data.user) {
+          document.getElementById('adminEmail').textContent = data.user.email;
+        }
+      });
+
+    // Récupérer et afficher les statistiques globales
+    fetch('http://localhost:3000/api/admin/stats', { credentials: 'include' })
+      .then(res => res.json())
+      .then(stats => {
+        // Statistiques principales
+        document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+        document.getElementById('totalReservations').textContent = stats.totalReservations || 0;
+        document.getElementById('totalRevenue').textContent = formatCFA(stats.revenus || 0);
+        document.getElementById('conversionRate').textContent = (stats.conversionRate || 0) + '%';
+        
+        // Statistiques récentes
+        document.getElementById('recentUsers').textContent = stats.recentUsers || 0;
+        document.getElementById('recentReservations').textContent = stats.recentReservations || 0;
+        document.getElementById('recentRevenue').textContent = formatCFA(stats.recentRevenue || 0);
+        document.getElementById('activeUsers').textContent = stats.activeUsers || 0;
+        
+        // Métriques utilisateurs
+        document.getElementById('avgReservationsPerUser').textContent = stats.avgReservationsPerUser || 0;
+        document.getElementById('activeUsersCount').textContent = stats.activeUsers || 0;
+        
+        // Top destinations
+        const topDestinationsList = document.getElementById('topDestinationsList');
+        if (stats.topDestinations && stats.topDestinations.length > 0) {
+          topDestinationsList.innerHTML = stats.topDestinations.map((dest, index) => `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <span class="badge bg-primary me-2">${index + 1}</span>
+                <span>${dest.destination}</span>
+              </div>
+              <span class="text-muted">${dest.count} réservations</span>
+            </div>
+          `).join('');
+        } else {
+          topDestinationsList.innerHTML = '<div class="text-center text-muted">Aucune donnée</div>';
+        }
+        
+        // Graphique des statuts
+        updateStatusChart(stats.statusStats);
+        
+        // Graphique principal (type de réservations)
+        updateMainChart(stats.typeStats);
+        
+        // Graphique d'évolution mensuelle
+        updateMonthlyChart(stats.monthlyStats);
+      })
+      .catch(error => {
+        console.error('Erreur lors du chargement des statistiques:', error);
+        showToast('Erreur lors du chargement des statistiques', 'danger');
+      });
+
+    // Récupérer et afficher les réservations
+    fetch('http://localhost:3000/api/admin/reservations', { credentials: 'include' })
+      .then(res => res.json())
+      .then(reservations => {
+        const tbody = document.querySelector('#reservationTable tbody');
+        tbody.innerHTML = '';
+        let bus = 0, hotel = 0, car = 0;
+        reservations.forEach(r => {
+          let statutBadge = '<span class="badge bg-secondary">' + (r.statut || 'Inconnue') + '</span>';
+          if (r.statut === 'Confirmée') statutBadge = '<span class="badge bg-success">Confirmée</span>';
+          if (r.statut === 'Annulée') statutBadge = '<span class="badge bg-danger">Annulée</span>';
+          if (r.type === 'Bus') bus++;
+          if (r.type === 'Hôtel') hotel++;
+          if (r.type === 'Voiture') car++;
+          tbody.innerHTML += `<tr data-id="${r.id}">
+            <td>${r.date ? new Date(r.date).toLocaleDateString('fr-FR') : ''}</td>
+            <td>${r.username || r.email || 'Utilisateur supprimé'}</td>
+            <td>${r.type || ''}</td>
+            <td>${r.destination || ''}</td>
+            <td>${statutBadge}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-info btn-view-user" data-user-id="${r.user_id}">Voir utilisateur</button>
+              <button class="btn btn-sm btn-outline-danger btn-del-res">Supprimer</button>
+            </td>
+          </tr>`;
+        });
+        // Met à jour le graphique
+        updateChart(bus, hotel, car);
+      });
+
+    // Suppression dynamique d'une réservation
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-del-res')) {
+        e.preventDefault();
+        if (confirm('Supprimer cette réservation ?')) {
+          const tr = e.target.closest('tr');
+          const id = tr.getAttribute('data-id');
+          fetch(`http://localhost:3000/api/admin/reservations/${id}`, {
+            method: 'DELETE', credentials: 'include'
+          })
+          .then(res => res.json())
+          .then(() => location.reload());
+        }
+      }
+    });
+
+    // Création d'une réservation (admin)
+    document.getElementById('createReservationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const type = document.getElementById('resType').value;
+      const destination = document.getElementById('resDestination').value;
+      const date = document.getElementById('resDate').value;
+      const prix = document.getElementById('resPrix').value;
+      const statut = document.getElementById('resStatut').value;
+      fetch('http://localhost:3000/api/user/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ type, destination, date, prix, statut })
+      })
+      .then(res => res.json())
+      .then(() => location.reload());
+    });
+
+    // Récupérer et afficher les utilisateurs
+    let allUsers = []; // Variable globale pour stocker tous les utilisateurs
+    
+    function loadUsers() {
+      fetch('http://localhost:3000/api/admin/users', { credentials: 'include' })
+        .then(res => res.json())
+        .then(users => {
+          allUsers = users; // Stocker tous les utilisateurs
+          displayUsers(users);
+        });
+    }
+    
+    function displayUsers(users) {
+      const tbody = document.querySelector('#userTable tbody');
+      tbody.innerHTML = '';
+      users.forEach(u => {
+        let badge = u.role === 'admin' ? '<span class="badge bg-warning text-dark">admin</span>' : '<span class="badge bg-info">user</span>';
+        const createdAt = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : 'N/A';
+        tbody.innerHTML += `<tr data-id="${u.id}">
+          <td>${u.email}</td>
+          <td>${u.username || ''}</td>
+          <td>${badge}</td>
+          <td>${createdAt}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary btn-edit-user" data-bs-toggle="modal" data-bs-target="#editUserModal">Modifier</button>
+            <button class="btn btn-sm btn-outline-danger btn-del-user">Supprimer</button>
+          </td>
+        </tr>`;
+      });
+    }
+    
+    // Fonctions de filtrage et recherche
+    function filterUsers() {
+      const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+      const roleFilter = document.getElementById('userRoleFilter').value;
+      const sortBy = document.getElementById('userSortBy').value;
+      
+      let filteredUsers = allUsers.filter(user => {
+        const matchesSearch = !searchTerm || 
+          user.username?.toLowerCase().includes(searchTerm) || 
+          user.email.toLowerCase().includes(searchTerm);
+        
+        const matchesRole = !roleFilter || user.role === roleFilter;
+        
+        return matchesSearch && matchesRole;
+      });
+      
+      // Tri
+      filteredUsers.sort((a, b) => {
+        switch(sortBy) {
+          case 'username':
+            return (a.username || '').localeCompare(b.username || '');
+          case 'email':
+            return a.email.localeCompare(b.email);
+          case 'role':
+            return a.role.localeCompare(b.role);
+          case 'created_at':
+          default:
+            return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+        }
+      });
+      
+      displayUsers(filteredUsers);
+    }
+    
+    function resetUserFilters() {
+      document.getElementById('userSearch').value = '';
+      document.getElementById('userRoleFilter').value = '';
+      document.getElementById('userSortBy').value = 'created_at';
+      displayUsers(allUsers);
+    }
+    
+    // Événements pour les filtres
+    document.getElementById('userSearch').addEventListener('input', filterUsers);
+    document.getElementById('userRoleFilter').addEventListener('change', filterUsers);
+    document.getElementById('userSortBy').addEventListener('change', filterUsers);
+    
+    // Charger les utilisateurs au démarrage
+    loadUsers();
+
+    // Ajout d'un nouvel utilisateur
+    document.getElementById('addUserForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const data = {
+        username: document.getElementById('newUsername').value,
+        email: document.getElementById('newEmail').value,
+        password: document.getElementById('newPassword').value,
+        role: document.getElementById('newRole').value
+      };
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/admin/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          showToast('Utilisateur créé avec succès !', 'success');
+          this.reset();
+          // Recharger la liste des utilisateurs
+          loadUsers();
+        } else {
+          showToast('Erreur : ' + (result.error || ''), 'danger');
+        }
+      } catch (error) {
+        showToast('Erreur de connexion', 'danger');
+      }
+    });
+
+    // Pré-remplir le modal d'édition utilisateur
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-edit-user')) {
+        const tr = e.target.closest('tr');
+        const userId = tr.getAttribute('data-id');
+        const email = tr.children[0].textContent;
+        const username = tr.children[1].textContent;
+        const role = tr.children[2].querySelector('.badge').textContent;
+        
+        document.getElementById('editUserId').value = userId;
+        document.getElementById('editUsername').value = username;
+        document.getElementById('editEmail').value = email;
+        document.getElementById('editRole').value = role === 'admin' ? 'admin' : 'user';
+        document.getElementById('editPassword').value = '';
+      }
+    });
+
+    // Enregistrement de la modification d'utilisateur
+    document.getElementById('editUserForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const userId = document.getElementById('editUserId').value;
+      const data = {
+        username: document.getElementById('editUsername').value,
+        email: document.getElementById('editEmail').value,
+        role: document.getElementById('editRole').value,
+        password: document.getElementById('editPassword').value
+      };
+      
+      try {
+        const response = await fetch(`http://localhost:3000/api/admin/users/${userId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          showToast('Utilisateur modifié avec succès !', 'success');
+          var modal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+          modal.hide();
+          // Recharger la liste des utilisateurs
+          loadUsers();
+        } else {
+          showToast('Erreur : ' + (result.error || ''), 'danger');
+        }
+      } catch (error) {
+        showToast('Erreur de connexion', 'danger');
+      }
+    });
+
+    // Suppression dynamique d'un utilisateur
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-del-user')) {
+        e.preventDefault();
+        const tr = e.target.closest('tr');
+        const userId = tr.getAttribute('data-id');
+        const email = tr.children[0].textContent;
+        
+        if (confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${email}" ?\n\nCette action supprimera également toutes ses réservations.`)) {
+          fetch(`http://localhost:3000/api/admin/users/${userId}`, {
+            method: 'DELETE', 
+            credentials: 'include'
+          })
+          .then(res => res.json())
+          .then(result => {
+            if (result.success) {
+              showToast('Utilisateur supprimé avec succès !', 'success');
+              loadUsers();
+            } else {
+              showToast('Erreur : ' + (result.error || ''), 'danger');
+            }
+          })
+          .catch(error => {
+            showToast('Erreur de connexion', 'danger');
+          });
+        }
+      }
+    });
+
+    // Déconnexion
+    function logout() {
+      fetch('http://localhost:3000/logout', { method: 'POST', credentials: 'include' })
+        .then(() => window.location.href = 'login.html');
+    }
+
+    // Graphique Chart.js dynamique
+    let chartInstance;
+    let statusChartInstance;
+    let monthlyChartInstance;
+    
+    function updateMainChart(typeStats) {
+      const ctx = document.getElementById('adminStatsChart').getContext('2d');
+      if (chartInstance) chartInstance.destroy();
+      
+      const labels = typeStats.map(item => item.type || 'Inconnu');
+      const data = typeStats.map(item => item.count);
+      
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Réservations',
+            data: data,
+            backgroundColor: ['#6d4c2b', '#e6b800', '#bfa074', '#8b7355'],
+            borderColor: ['#5a3f23', '#d4a700', '#a89064', '#7a6445'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { 
+            legend: { display: false },
+            title: {
+              display: true,
+              text: 'Répartition par Type de Réservation'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    function updateStatusChart(statusStats) {
+      const ctx = document.getElementById('statusChart').getContext('2d');
+      if (statusChartInstance) statusChartInstance.destroy();
+      
+      const labels = statusStats.map(item => item.statut || 'Inconnu');
+      const data = statusStats.map(item => item.count);
+      const colors = ['#28a745', '#dc3545', '#ffc107', '#17a2b8', '#6c757d'];
+      
+      statusChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: colors.slice(0, data.length),
+            borderWidth: 2,
+            borderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { 
+            legend: { 
+              position: 'bottom',
+              labels: {
+                padding: 10,
+                usePointStyle: true
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    function updateMonthlyChart(monthlyStats) {
+      // Créer un canvas pour le graphique mensuel si il n'existe pas
+      let monthlyCanvas = document.getElementById('monthlyChart');
+      if (!monthlyCanvas) {
+        const monthlySection = document.createElement('div');
+        monthlySection.className = 'col-lg-6 mb-4';
+        monthlySection.innerHTML = `
+          <div class="card dashboard-card p-4">
+            <h2 class="section-title gold">Évolution Mensuelle</h2>
+            <canvas id="monthlyChart" height="180"></canvas>
+          </div>
+        `;
+        document.querySelector('.row.mb-5').appendChild(monthlySection);
+        monthlyCanvas = document.getElementById('monthlyChart');
+      }
+      
+      const ctx = monthlyCanvas.getContext('2d');
+      if (monthlyChartInstance) monthlyChartInstance.destroy();
+      
+      const labels = monthlyStats.map(item => {
+        const [year, month] = item.month.split('-');
+        const monthNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+        return `${monthNames[parseInt(month) - 1]} ${year}`;
+      });
+      const reservationsData = monthlyStats.map(item => item.reservations);
+      const revenueData = monthlyStats.map(item => item.revenue);
+      
+      monthlyChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Réservations',
+            data: reservationsData,
+            borderColor: '#6d4c2b',
+            backgroundColor: 'rgba(109, 76, 43, 0.1)',
+            yAxisID: 'y'
+          }, {
+            label: 'Revenus (FCFA)',
+            data: revenueData,
+            borderColor: '#e6b800',
+            backgroundColor: 'rgba(230, 184, 0, 0.1)',
+            yAxisID: 'y1'
+          }]
+        },
+        options: {
+          responsive: true,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: { 
+            legend: { 
+              position: 'top',
+              labels: {
+                usePointStyle: true
+              }
+            }
+          },
+          scales: {
+            x: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Mois'
+              }
+            },
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: {
+                display: true,
+                text: 'Réservations'
+              }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: {
+                display: true,
+                text: 'Revenus (FCFA)'
+              },
+              grid: {
+                drawOnChartArea: false,
+              },
+            }
+          }
+        }
+      });
+    }
+
+    // Tri du tableau des réservations
+    function sortTable(n) {
+      var table = document.getElementById("reservationTable");
+      var rows = Array.from(table.rows).slice(1);
+      var asc = table.asc = !table.asc;
+      rows.sort(function(a, b) {
+        return asc
+          ? a.cells[n].innerText.localeCompare(b.cells[n].innerText)
+          : b.cells[n].innerText.localeCompare(a.cells[n].innerText);
+      });
+      rows.forEach(row => table.tBodies[0].appendChild(row));
+    }
+    // Tri du tableau des utilisateurs
+    function sortUserTable(n) {
+      var table = document.getElementById("userTable");
+      var rows = Array.from(table.rows).slice(1);
+      var asc = table.asc = !table.asc;
+      rows.sort(function(a, b) {
+        return asc
+          ? a.cells[n].innerText.localeCompare(b.cells[n].innerText)
+          : b.cells[n].innerText.localeCompare(a.cells[n].innerText);
+      });
+      rows.forEach(row => table.tBodies[0].appendChild(row));
+    }
+
+    // === GESTION TRAJETS (ADMIN) ===
+    // Affichage des trajets
+    function loadTrips() {
+      fetch('http://localhost:3000/api/trips?departure=&destination=&date=', { credentials: 'include' })
+        .then(res => res.json())
+        .then(trips => {
+          const tbody = document.querySelector('#tripTable tbody');
+          tbody.innerHTML = '';
+          if (!Array.isArray(trips)) return;
+          trips.forEach(trip => {
+            tbody.innerHTML += `<tr data-id="${trip.id}">
+              <td>${trip.departure}</td>
+              <td>${trip.destination}</td>
+              <td>${trip.date}</td>
+              <td>${trip.departure_time?.slice(0,5) || ''}</td>
+              <td>${trip.arrival_time?.slice(0,5) || ''}</td>
+              <td>${trip.duration}</td>
+              <td>${formatCFA(trip.price)}</td>
+              <td>${trip.company}</td>
+              <td>${(trip.features||[]).join ? trip.features.join(', ') : trip.features}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary btn-edit-trip" data-bs-toggle="modal" data-bs-target="#editTripModal">Modifier</button>
+                <button class="btn btn-sm btn-outline-danger btn-del-trip">Supprimer</button>
+              </td>
+            </tr>`;
+          });
+        });
+    }
+    loadTrips();
+    // Ajout d'un trajet
+    document.getElementById('addTripForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const data = {
+        departure: document.getElementById('tripDeparture').value,
+        destination: document.getElementById('tripDestination').value,
+        date: document.getElementById('tripDate').value,
+        departure_time: document.getElementById('tripDepartureTime').value,
+        arrival_time: document.getElementById('tripArrivalTime').value,
+        duration: document.getElementById('tripDuration').value,
+        price: document.getElementById('tripPrice').value,
+        company: 'General Travel',
+        features: document.getElementById('tripFeatures').value.split(',').map(f => f.trim()).filter(f => f)
+      };
+      const response = await fetch('http://localhost:3000/api/admin/trips', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      if (result.success) {
+        showToast('Trajet ajouté !', 'success');
+        this.reset();
+        loadTrips();
+      } else {
+        showToast('Erreur : ' + (result.error || ''), 'danger');
+      }
+    });
+    // Pré-remplir le modal d'édition
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-edit-trip')) {
+        const tr = e.target.closest('tr');
+        document.getElementById('editTripId').value = tr.getAttribute('data-id');
+        document.getElementById('editTripDeparture').value = tr.children[0].textContent;
+        document.getElementById('editTripDestination').value = tr.children[1].textContent;
+        document.getElementById('editTripDate').value = tr.children[2].textContent;
+        document.getElementById('editTripDepartureTime').value = tr.children[3].textContent;
+        document.getElementById('editTripArrivalTime').value = tr.children[4].textContent;
+        document.getElementById('editTripDuration').value = tr.children[5].textContent;
+        document.getElementById('editTripPrice').value = tr.children[6].textContent.replace('€','');
+        document.getElementById('editTripCompany').value = tr.children[7].textContent;
+        document.getElementById('editTripFeatures').value = tr.children[8].textContent;
+      }
+    });
+    // Enregistrement de la modification
+    document.getElementById('editTripForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('editTripId').value;
+      const data = {
+        departure: document.getElementById('editTripDeparture').value,
+        destination: document.getElementById('editTripDestination').value,
+        date: document.getElementById('editTripDate').value,
+        departure_time: document.getElementById('editTripDepartureTime').value,
+        arrival_time: document.getElementById('editTripArrivalTime').value,
+        duration: document.getElementById('editTripDuration').value,
+        price: document.getElementById('editTripPrice').value,
+        company: document.getElementById('editTripCompany').value,
+        features: document.getElementById('editTripFeatures').value.split(',').map(f => f.trim()).filter(f => f)
+      };
+      const response = await fetch(`http://localhost:3000/api/admin/trips/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      if (result.success) {
+        showToast('Trajet modifié !', 'success');
+        var modal = bootstrap.Modal.getInstance(document.getElementById('editTripModal'));
+        modal.hide();
+        loadTrips();
+      } else {
+        showToast('Erreur : ' + (result.error || ''), 'danger');
+      }
+    });
+    // Suppression d'un trajet
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-del-trip')) {
+        if (confirm('Supprimer ce trajet ?')) {
+          const tr = e.target.closest('tr');
+          const id = tr.getAttribute('data-id');
+          fetch(`http://localhost:3000/api/admin/trips/${id}`, {
+            method: 'DELETE', credentials: 'include'
+          })
+          .then(res => res.json())
+          .then(result => {
+            if (result.success) {
+              loadTrips();
+            } else {
+              showToast('Erreur : ' + (result.error || ''), 'danger');
+            }
+          });
+        }
+      }
+    });
+
+    // Bouton pour voir tous les trajets
+    document.getElementById('btnShowAllTrips').addEventListener('click', function() {
+      loadTrips();
+    });
+
+    function formatCFA(val) {
+      return Number(val).toLocaleString('fr-FR') + ' FCFA';
+    }
+
+    function showToast(message, type='success') {
+      const toastZone = document.getElementById('toastZone');
+      const toast = document.createElement('div');
+      toast.className = `toast align-items-center text-bg-${type} border-0 show`;
+      toast.role = 'alert';
+      toast.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+      toastZone.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    // Modal détails utilisateur
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-view-user')) {
+        e.preventDefault();
+        const userId = e.target.getAttribute('data-user-id');
+        if (!userId) {
+          showToast('Utilisateur non trouvé', 'warning');
+          return;
+        }
+        
+        fetch(`http://localhost:3000/api/admin/users/${userId}`, { credentials: 'include' })
+          .then(res => res.json())
+          .then(user => {
+            if (user.error) {
+              showToast('Erreur : ' + user.error, 'danger');
+              return;
+            }
+            
+            // Créer le contenu du modal
+            const modalContent = `
+              <div class="modal-header">
+                <h5 class="modal-title">Détails de l'utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p><strong>Nom d'utilisateur:</strong> ${user.username || 'Non défini'}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Rôle:</strong> <span class="badge ${user.role === 'admin' ? 'bg-warning text-dark' : 'bg-info'}">${user.role}</span></p>
+                    <p><strong>Inscrit le:</strong> ${user.created_at ? new Date(user.created_at).toLocaleDateString('fr-FR') : 'N/A'}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Réservations (${user.reservations ? user.reservations.length : 0})</h6>
+                    ${user.reservations && user.reservations.length > 0 ? 
+                      `<ul class="list-unstyled">
+                        ${user.reservations.slice(0, 5).map(r => `
+                          <li class="mb-1">
+                            <small>${r.type} - ${r.destination} (${r.date ? new Date(r.date).toLocaleDateString('fr-FR') : 'N/A'})</small>
+                          </li>
+                        `).join('')}
+                        ${user.reservations.length > 5 ? `<li><small class="text-muted">... et ${user.reservations.length - 5} autres</small></li>` : ''}
+                      </ul>` : 
+                      '<p class="text-muted">Aucune réservation</p>'
+                    }
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              </div>
+            `;
+            
+            // Créer et afficher le modal
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  ${modalContent}
+                </div>
+              </div>
+            `;
+            document.body.appendChild(modal);
+            
+            const modalInstance = new bootstrap.Modal(modal);
+            modalInstance.show();
+            
+            // Nettoyer le modal après fermeture
+            modal.addEventListener('hidden.bs.modal', function() {
+              document.body.removeChild(modal);
+            });
+          })
+          .catch(error => {
+            showToast('Erreur de connexion', 'danger');
+          });
+      }
+    });
+  </script>
+</body>
+</html> 

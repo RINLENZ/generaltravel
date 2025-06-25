@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord - Utilisateur | General Travel</title>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/style/style1.css" rel="stylesheet">
+  <link rel="icon" href="assets/img/clients/client1.png">
+  <style>
+    body { background: #f4f6fa; }
+    .dashboard-header { background: #6d4c2b; color: #fff; padding: 1.5rem 0; }
+    .dashboard-header h1 { font-size: 2.2rem; }
+    .dashboard-card { border-radius: 1rem; box-shadow: 0 2px 8px #0001; }
+    .dashboard-card .card-title { color: #6d4c2b; }
+    .quick-actions .btn { margin-right: 1rem; margin-bottom: 1rem; }
+    .reservation-table th { background: #6d4c2b; color: #fff; }
+    .reservation-table td { background: #fff; }
+    .gold { color: #e6b800; }
+    .btn-primary, .bg-primary {
+      background-color: #0a1931 !important;
+      border-color: #0a1931 !important;
+    }
+    .btn-primary:hover, .bg-primary-dark {
+      background-color: #e6b800 !important;
+      border-color: #e6b800 !important;
+      color: #0a1931 !important;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .badge.bg-secondary, .option-badge {
+      background: #e6b800 !important;
+      color: #6d4c2b !important;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      margin-right: 0.25rem;
+    }
+    .text-primary { color: #e6b800 !important; }
+    .display-3 { font-size: 3rem; }
+  </style>
+</head>
+<body>
+  <header class="dashboard-header text-center">
+    <div class="container position-relative">
+      <div class="user-menu dropdown float-end">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="assets/img/clients/client3.png" alt="Avatar" class="dashboard-avatar me-2" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #e6b800;">
+          <span id="userEmail">Utilisateur</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+          <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Mon Profil</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Paramètres</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Déconnexion</a></li>
+        </ul>
+      </div>
+      <h1>Bienvenue sur votre espace voyageur</h1>
+      <p>Gérez vos réservations et découvrez de nouvelles destinations avec <span class="gold">General Travel</span></p>
+      <nav class="mt-3">
+        <a href="index.html" class="btn btn-outline-light me-2"><i class="bi bi-house"></i> Accueil</a>
+        <a href="recherche.html" class="btn btn-outline-light me-2"><i class="bi bi-search"></i> Rechercher</a>
+        <a href="#" class="btn btn-outline-light me-2"><i class="bi bi-plus-circle"></i> Nouvelle réservation</a>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" onclick="showBusReservation()">
+            <i class="bi bi-bus-front"></i> Réservation Bus
+          </button>
+          <button class="btn btn-warning" onclick="showHotelReservation()">
+            <i class="bi bi-building"></i> Réservation Hôtel
+          </button>
+          <button class="btn btn-info" onclick="showCarReservation()">
+            <i class="bi bi-car-front"></i> Location Voiture
+          </button>
+          <a href="#" class="btn btn-outline-danger" onclick="logout()">
+            <i class="bi bi-box-arrow-right"></i> Déconnexion
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main class="container my-5">
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-calendar2-check display-4 gold mb-2"></i>
+            <h5 class="card-title">Réservations actives</h5>
+            <p class="display-6" id="totalReservations">0</p>
+            <small class="text-muted">+<span id="recentReservations">0</span> ce mois</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-geo-alt display-4 gold mb-2"></i>
+            <h5 class="card-title">Destinations visitées</h5>
+            <p class="display-6" id="destinationsVisited">0</p>
+            <small class="text-muted">Voyages uniques</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-star display-4 gold mb-2"></i>
+            <h5 class="card-title">Points fidélité</h5>
+            <p class="display-6" id="points">0</p>
+            <small class="text-muted">Taux: <span id="conversionRate">0%</span></small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card dashboard-card text-center p-4 mb-4">
+          <div class="card-body">
+            <i class="bi bi-cash-coin display-4 gold mb-2"></i>
+            <h5 class="card-title">Total dépensé</h5>
+            <p class="display-6" id="totalSpent">0 FCFA</p>
+            <small class="text-muted">Réservations confirmées</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Nouvelles cartes de statistiques utilisateur -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card dashboard-card p-4">
+          <h6 class="card-title gold mb-3">Destinations Favorites</h6>
+          <div id="favoriteDestinationsList">
+            <div class="text-center text-muted">Chargement...</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card dashboard-card p-4">
+          <h6 class="card-title gold mb-3">Répartition par Type</h6>
+          <canvas id="userTypeChart" height="200"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card dashboard-card p-4">
+          <h6 class="card-title gold mb-3">Historique</h6>
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="border-end">
+                <h6 class="text-primary" id="firstReservation">-</h6>
+                <small class="text-muted">Première réservation</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <h6 class="text-success" id="lastReservation">-</h6>
+              <small class="text-muted">Dernière réservation</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="mb-5">
+      <h2 class="mb-3 gold">Mes dernières réservations</h2>
+      
+      <!-- Tableau des réservations -->
+      <div class="table-responsive mb-4">
+        <table class="table reservation-table" id="reservationTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Date <i class="bi bi-arrow-down-up"></i></th>
+              <th onclick="sortTable(1)">Type <i class="bi bi-arrow-down-up"></i></th>
+              <th>Destination</th>
+              <th>Statut</th>
+              <th>Prix</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Rempli dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Bouton pour ouvrir le modal d'ajout -->
+      <button class="btn btn-primary mb-3" id="btnShowAllTripsUser"><i class="bi bi-search"></i> Voir les trajets disponibles</button>
+      
+      <!-- Section résultats trajets -->
+      <div id="resultsSection" class="mb-4" style="display:none">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title mb-4">Trajets disponibles</h4>
+            <div id="tripResults"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section sélection des sièges -->
+      <div id="seatSection" class="mb-4" style="display:none">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title mb-4">Sélection des sièges</h4>
+            <div id="seatMap" class="d-flex flex-wrap gap-2 mb-3"></div>
+            <div id="selectedSeats" class="mb-2"></div>
+            <div class="mb-2">Prix par siège : <span id="seatPrice">0 FCFA</span></div>
+            <div class="mb-2">Total : <span id="totalPrice">0 FCFA</span></div>
+            <button id="continueBtn" class="btn btn-primary" disabled>Continuer</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section formulaire voyageur -->
+      <div id="bookingSection" class="mb-4" style="display:none">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title mb-4">Informations voyageur</h4>
+            <form id="bookingForm">
+              <div class="row g-3">
+                <div class="col-md-6"><input type="text" id="firstName" class="form-control" placeholder="Prénom *" required></div>
+                <div class="col-md-6"><input type="text" id="lastName" class="form-control" placeholder="Nom *" required></div>
+                <div class="col-md-6"><input type="email" id="email" class="form-control" placeholder="Email *" required></div>
+                <div class="col-md-6"><input type="tel" id="phone" class="form-control" placeholder="Téléphone *" required></div>
+                <div class="col-12"><textarea id="comments" class="form-control" placeholder="Commentaires (optionnel)"></textarea></div>
+                <div class="col-12"><button type="submit" class="btn btn-success w-100">Confirmer la réservation</button></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section confirmation -->
+      <div id="confirmationSection" class="mb-4" style="display:none">
+        <div class="card text-center">
+          <div class="card-body">
+            <div class="text-success display-3 mb-3">✓</div>
+            <h4 class="card-title mb-3">Réservation confirmée !</h4>
+            <div id="confirmationDetails" class="mb-3"></div>
+            <button class="btn btn-primary" onclick="resetReservationFlow()">Nouvelle réservation</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="quick-actions mb-5">
+      <h2 class="mb-3 gold">Actions rapides</h2>
+      <a href="#" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nouvelle réservation</a>
+      <a href="#" class="btn btn-outline-secondary"><i class="bi bi-person"></i> Modifier mon profil</a>
+      <a href="#" class="btn btn-outline-danger"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+    </section>
+
+    <!-- Section Réservation Hôtel -->
+    <div id="hotelSection" class="mb-5" style="display: none;">
+      <div class="card dashboard-card">
+        <div class="card-header">
+          <h2 class="section-title gold">Réservation Hôtel</h2>
+        </div>
+        <div class="card-body">
+          <!-- Formulaire de recherche hôtel -->
+          <form id="hotelSearchForm" class="row g-3 mb-4">
+            <div class="col-md-3">
+              <label class="form-label">Ville</label>
+              <input type="text" class="form-control" id="hotelCity" placeholder="Ex: Douala">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date d'arrivée</label>
+              <input type="date" class="form-control" id="hotelCheckIn" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date de départ</label>
+              <input type="date" class="form-control" id="hotelCheckOut" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Nombre de voyageurs</label>
+              <select class="form-select" id="hotelGuests">
+                <option value="1">1 personne</option>
+                <option value="2" selected>2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">Rechercher des hôtels</button>
+            </div>
+          </form>
+
+          <!-- Résultats de recherche hôtel -->
+          <div id="hotelResults" style="display: none;">
+            <h4>Hôtels disponibles</h4>
+            <div id="hotelList" class="row"></div>
+          </div>
+
+          <!-- Sélection de chambre -->
+          <div id="roomSelection" style="display: none;">
+            <h4>Chambres disponibles</h4>
+            <div id="roomList" class="row"></div>
+          </div>
+
+          <!-- Formulaire de réservation hôtel -->
+          <div id="hotelBookingForm" style="display: none;">
+            <h4>Informations de réservation</h4>
+            <form id="hotelReservationForm" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Nom complet *</label>
+                <input type="text" class="form-control" id="hotelGuestName" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control" id="hotelGuestEmail" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Téléphone *</label>
+                <input type="tel" class="form-control" id="hotelGuestPhone" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Nombre de nuits</label>
+                <input type="text" class="form-control" id="hotelNights" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Prix total</label>
+                <input type="text" class="form-control" id="hotelTotalPrice" readonly>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-success">Confirmer la réservation</button>
+                <button type="button" class="btn btn-secondary" onclick="resetHotelFlow()">Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Réservation Voiture -->
+    <div id="carSection" class="mb-5" style="display: none;">
+      <div class="card dashboard-card">
+        <div class="card-header">
+          <h2 class="section-title gold">Location de Voiture</h2>
+        </div>
+        <div class="card-body">
+          <!-- Formulaire de recherche voiture -->
+          <form id="carSearchForm" class="row g-3 mb-4">
+            <div class="col-md-3">
+              <label class="form-label">Ville</label>
+              <input type="text" class="form-control" id="carCity" placeholder="Ex: Douala">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date de prise en charge</label>
+              <input type="date" class="form-control" id="carPickupDate" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date de retour</label>
+              <input type="date" class="form-control" id="carReturnDate" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Nombre de passagers</label>
+              <select class="form-select" id="carPassengers">
+                <option value="1">1 personne</option>
+                <option value="2">2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
+                <option value="5">5 personnes</option>
+                <option value="6">6 personnes</option>
+                <option value="7">7 personnes</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">Rechercher des voitures</button>
+            </div>
+          </form>
+
+          <!-- Résultats de recherche voiture -->
+          <div id="carResults" style="display: none;">
+            <h4>Voitures disponibles</h4>
+            <div id="carList" class="row"></div>
+          </div>
+
+          <!-- Formulaire de réservation voiture -->
+          <div id="carBookingForm" style="display: none;">
+            <h4>Informations de location</h4>
+            <form id="carReservationForm" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Nom du conducteur *</label>
+                <input type="text" class="form-control" id="carDriverName" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Numéro de permis *</label>
+                <input type="text" class="form-control" id="carDriverLicense" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Téléphone *</label>
+                <input type="tel" class="form-control" id="carDriverPhone" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Lieu de prise en charge</label>
+                <input type="text" class="form-control" id="carPickupLocation" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Lieu de retour</label>
+                <input type="text" class="form-control" id="carReturnLocation" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Nombre de jours</label>
+                <input type="text" class="form-control" id="carDays" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Prix total</label>
+                <input type="text" class="form-control" id="carTotalPrice" readonly>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-success">Confirmer la location</button>
+                <button type="button" class="btn btn-secondary" onclick="resetCarFlow()">Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="text-center py-4" style="background:#6d4c2b;color:#fff;">
+    &copy; 2025 General Travel. Tous droits réservés.
+  </footer>
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Toast container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastZone" style="z-index: 9999;"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Affichage de l'email utilisateur
+      fetch('http://localhost:3000/profile', { credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.logged && data.user) {
+            document.getElementById('userEmail').textContent = data.user.email;
+          } else {
+            // Rediriger vers login si pas connecté
+            window.location.href = 'login.html';
+          }
+        });
+
+      // Statistiques utilisateur
+      fetch('http://localhost:3000/api/user/stats', { credentials: 'include' })
+        .then(res => res.json())
+        .then(stats => {
+          // Statistiques principales
+          document.getElementById('totalReservations').textContent = stats.totalReservations || 0;
+          document.getElementById('destinationsVisited').textContent = stats.destinationsVisited || 0;
+          document.getElementById('points').textContent = stats.points || 0;
+          document.getElementById('totalSpent').textContent = formatCFA(stats.totalSpent || 0);
+          document.getElementById('conversionRate').textContent = (stats.conversionRate || 0) + '%';
+          
+          // Statistiques récentes
+          document.getElementById('recentReservations').textContent = stats.recentReservations || 0;
+          
+          // Dates importantes
+          if (stats.firstReservation) {
+            document.getElementById('firstReservation').textContent = new Date(stats.firstReservation).toLocaleDateString('fr-FR');
+          }
+          if (stats.lastReservation) {
+            document.getElementById('lastReservation').textContent = new Date(stats.lastReservation).toLocaleDateString('fr-FR');
+          }
+          
+          // Destinations favorites
+          const favoriteDestinationsList = document.getElementById('favoriteDestinationsList');
+          if (stats.favoriteDestinations && stats.favoriteDestinations.length > 0) {
+            favoriteDestinationsList.innerHTML = stats.favoriteDestinations.map((dest, index) => `
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <span class="badge bg-warning text-dark me-2">${index + 1}</span>
+                  <span>${dest.destination}</span>
+                </div>
+                <span class="text-muted">${dest.count} fois</span>
+              </div>
+            `).join('');
+          } else {
+            favoriteDestinationsList.innerHTML = '<div class="text-center text-muted">Aucune destination favorite</div>';
+          }
+          
+          // Graphique des types de réservation
+          updateUserTypeChart(stats.typeStats);
+          
+          // Graphique d'évolution mensuelle
+          updateUserMonthlyChart(stats.monthlyStats);
+        })
+        .catch(error => {
+          console.error('Erreur lors du chargement des statistiques:', error);
+          showToast('Erreur lors du chargement des statistiques', 'danger');
+        });
+
+      // Récupérer et afficher les réservations utilisateur
+      function loadUserReservations() {
+        fetch('http://localhost:3000/api/user/reservations', { credentials: 'include' })
+          .then(res => res.json())
+          .then(reservations => {
+            const tbody = document.querySelector('#reservationTable tbody');
+            tbody.innerHTML = '';
+            
+            if (reservations.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Aucune réservation trouvée</td></tr>';
+              return;
+            }
+            
+            reservations.forEach(r => {
+              let statutBadge = '<span class="badge bg-secondary">' + (r.statut || 'Inconnue') + '</span>';
+              if (r.statut === 'Confirmée') statutBadge = '<span class="badge bg-success">Confirmée</span>';
+              if (r.statut === 'Annulée') statutBadge = '<span class="badge bg-danger">Annulée</span>';
+              if (r.statut === 'Terminée') statutBadge = '<span class="badge bg-info">Terminée</span>';
+              
+              const prix = r.prix ? formatCFA(r.prix) : 'N/A';
+              
+              tbody.innerHTML += `<tr data-id="${r.id}">
+                <td>${r.date ? new Date(r.date).toLocaleDateString('fr-FR') : 'N/A'}</td>
+                <td>${r.type || 'N/A'}</td>
+                <td>${r.destination || 'N/A'}</td>
+                <td>${statutBadge}</td>
+                <td>${prix}</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary btn-view-res">Voir</button>
+                  <button class="btn btn-sm btn-outline-warning btn-edit-res">Modifier</button>
+                  <button class="btn btn-sm btn-outline-danger btn-del-res">Supprimer</button>
+                </td>
+              </tr>`;
+            });
+          })
+          .catch(error => {
+            console.error('Erreur lors du chargement des réservations:', error);
+            showToast('Erreur lors du chargement des réservations', 'danger');
+          });
+      }
+      
+      // Charger les réservations au démarrage
+      loadUserReservations();
+
+      // Suppression dynamique d'une réservation (utilisateur)
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-del-res')) {
+          e.preventDefault();
+          const tr = e.target.closest('tr');
+          const id = tr.getAttribute('data-id');
+          const destination = tr.children[2].textContent;
+          
+          if (confirm(`Êtes-vous sûr de vouloir supprimer la réservation pour "${destination}" ?`)) {
+            fetch(`http://localhost:3000/api/user/reservations/${id}`, {
+              method: 'DELETE', 
+              credentials: 'include'
+            })
+            .then(res => res.json())
+            .then(result => {
+              if (result.success) {
+                showToast('Réservation supprimée avec succès !', 'success');
+                loadUserReservations();
+              } else {
+                showToast('Erreur : ' + (result.error || ''), 'danger');
+              }
+            })
+            .catch(error => {
+              showToast('Erreur de connexion', 'danger');
+            });
+          }
+        }
+      });
+
+      // Modification dynamique d'une réservation (formulaire inline)
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-edit-res')) {
+          e.preventDefault();
+          const tr = e.target.closest('tr');
+          const id = tr.getAttribute('data-id');
+          const tds = tr.querySelectorAll('td');
+          
+          // Récupère les valeurs actuelles
+          const date = tds[0].textContent !== 'N/A' ? new Date(tds[0].textContent).toISOString().split('T')[0] : '';
+          const type = tds[1].textContent !== 'N/A' ? tds[1].textContent : '';
+          const destination = tds[2].textContent !== 'N/A' ? tds[2].textContent : '';
+          const statut = tds[3].querySelector('.badge') ? tds[3].querySelector('.badge').textContent.trim() : '';
+          const prix = tds[4].textContent !== 'N/A' ? tds[4].textContent.replace(' FCFA', '').replace(/\s/g, '') : '';
+          
+          // Remplace la ligne par un formulaire
+          tr.innerHTML = `
+            <td><input type="date" class="form-control form-control-sm" value="${date}"></td>
+            <td>
+              <select class="form-select form-select-sm">
+                <option value="Bus" ${type === 'Bus' ? 'selected' : ''}>Bus</option>
+                <option value="Hôtel" ${type === 'Hôtel' ? 'selected' : ''}>Hôtel</option>
+                <option value="Voiture" ${type === 'Voiture' ? 'selected' : ''}>Voiture</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control form-control-sm" value="${destination}"></td>
+            <td>
+              <select class="form-select form-select-sm">
+                <option value="Confirmée" ${statut === 'Confirmée' ? 'selected' : ''}>Confirmée</option>
+                <option value="Annulée" ${statut === 'Annulée' ? 'selected' : ''}>Annulée</option>
+                <option value="Terminée" ${statut === 'Terminée' ? 'selected' : ''}>Terminée</option>
+              </select>
+            </td>
+            <td><input type="number" class="form-control form-control-sm" value="${prix}" placeholder="Prix"></td>
+            <td>
+              <button class="btn btn-sm btn-success btn-save-res">Enregistrer</button>
+              <button class="btn btn-sm btn-secondary btn-cancel-edit">Annuler</button>
+            </td>
+          `;
+          
+          // Sauvegarde
+          tr.querySelector('.btn-save-res').onclick = function() {
+            const newDate = tr.querySelector('input[type="date"]').value;
+            const newType = tr.querySelectorAll('select')[0].value;
+            const newDestination = tr.querySelector('input[type="text"]').value;
+            const newStatut = tr.querySelectorAll('select')[1].value;
+            const newPrix = tr.querySelector('input[type="number"]').value;
+            
+            if (!newDate || !newType || !newDestination) {
+              showToast('Veuillez remplir tous les champs obligatoires', 'warning');
+              return;
+            }
+            
+            fetch(`http://localhost:3000/api/user/reservations/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ 
+                type: newType, 
+                destination: newDestination, 
+                date: newDate, 
+                statut: newStatut, 
+                prix: newPrix || 0 
+              })
+            })
+            .then(res => res.json())
+            .then(result => {
+              if (result.success) {
+                showToast('Réservation modifiée avec succès !', 'success');
+                loadUserReservations();
+              } else {
+                showToast('Erreur : ' + (result.error || ''), 'danger');
+              }
+            })
+            .catch(error => {
+              showToast('Erreur de connexion', 'danger');
+            });
+          };
+          
+          // Annuler
+          tr.querySelector('.btn-cancel-edit').onclick = function() { 
+            loadUserReservations(); 
+          };
+        }
+      });
+
+      // === Réservation dynamique bus (user dashboard) ===
+      let selectedTrip = null;
+      let selectedSeats = [];
+      let seatPrice = 0;
+      let occupiedSeats = [];
+      // Afficher tous les trajets disponibles
+      document.getElementById('btnShowAllTripsUser').addEventListener('click', async function() {
+        document.getElementById('resultsSection').style.display = '';
+        document.getElementById('seatSection').style.display = 'none';
+        document.getElementById('bookingSection').style.display = 'none';
+        document.getElementById('confirmationSection').style.display = 'none';
+        document.getElementById('tripResults').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div><div>Chargement...</div></div>';
+        
+        try {
+          const response = await fetch('http://localhost:3000/api/trips');
+          const trips = await response.json();
+          
+          if (!trips.length) {
+            document.getElementById('tripResults').innerHTML = '<div class="alert alert-info">Aucun trajet trouvé.</div>';
+            return;
+          }
+          
+          document.getElementById('tripResults').innerHTML = trips.map(trip => `
+            <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-center">
+              <div>
+                <div><b>${trip.departure_time?.slice(0,5) || ''}</b> → <b>${trip.arrival_time?.slice(0,5) || ''}</b> (${trip.duration})</div>
+                <div>${trip.departure} → ${trip.destination}</div>
+                <div>${trip.company} ${trip.features.map(f => `<span class='badge bg-secondary ms-1'>${f}</span>`).join('')}</div>
+              </div>
+              <div class="text-end">
+                <div class="fw-bold text-primary">${formatCFA(trip.price)}</div>
+                <button class="btn btn-primary mt-2" onclick="selectTrip(${trip.id}, ${trip.price})">Sélectionner</button>
+              </div>
+            </div>
+          `).join('');
+          
+          window.selectTrip = selectTrip;
+        } catch (err) {
+          document.getElementById('tripResults').innerHTML = '<div class="alert alert-danger">Erreur lors de la recherche.</div>';
+        }
+      });
+      
+      // Sélection d'un trajet et récupération des sièges occupés
+      async function selectTrip(tripId, price) {
+        selectedTrip = tripId;
+        seatPrice = price;
+        selectedSeats = [];
+        
+        // Récupère les sièges occupés depuis le backend
+        try {
+          const response = await fetch(`http://localhost:3000/api/trips/${tripId}/seats?date=2024-07-01`);
+          occupiedSeats = await response.json();
+        } catch (e) {
+          occupiedSeats = [];
+        }
+        
+        displaySeatMap(occupiedSeats);
+        document.getElementById('seatSection').style.display = '';
+        document.getElementById('bookingSection').style.display = 'none';
+        document.getElementById('confirmationSection').style.display = 'none';
+        document.getElementById('seatSection').scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Fonction pour formater les montants en FCFA
+      function formatCFA(val) {
+        return Number(val).toLocaleString('fr-FR') + ' FCFA';
+      }
+      
+      // Fonction pour afficher les toasts
+      function showToast(message, type='success') {
+        const toastZone = document.getElementById('toastZone');
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-bg-${type} border-0 show`;
+        toast.role = 'alert';
+        toast.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+        toastZone.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+      }
+      
+      // Fonction pour afficher la carte des sièges
+      function displaySeatMap(occupiedSeats) {
+        const seatMap = document.getElementById('seatMap');
+        let seatHTML = '';
+        for (let i = 1; i <= 40; i++) {
+          const isOccupied = occupiedSeats.includes(i);
+          seatHTML += `
+            <div class="seat btn btn-sm ${isOccupied ? 'btn-danger disabled' : 'btn-outline-success'} mb-1" 
+                 style="width:40px;" 
+                 ${!isOccupied ? `onclick="toggleSeat(${i})"` : ''} 
+                 id="seat-${i}">${i}</div>
+          `;
+        }
+        seatMap.innerHTML = seatHTML;
+        window.toggleSeat = toggleSeat;
+        updateSeatSummary();
+      }
+      
+      // Sélection/désélection de siège
+      function toggleSeat(seatNumber) {
+        const seatElement = document.getElementById(`seat-${seatNumber}`);
+        
+        if (selectedSeats.includes(seatNumber)) {
+          selectedSeats = selectedSeats.filter(s => s !== seatNumber);
+          seatElement.classList.remove('btn-primary');
+          seatElement.classList.add('btn-outline-success');
+        } else {
+          if (selectedSeats.length >= 4) {
+            showToast('Vous ne pouvez sélectionner que 4 sièges maximum', 'warning');
+            return;
+          }
+          selectedSeats.push(seatNumber);
+          seatElement.classList.remove('btn-outline-success');
+          seatElement.classList.add('btn-primary');
+        }
+        updateSeatSummary();
+      }
+      
+      function updateSeatSummary() {
+        const selectedSeatsElement = document.getElementById('selectedSeats');
+        const totalPriceElement = document.getElementById('totalPrice');
+        const continueBtn = document.getElementById('continueBtn');
+        
+        if (selectedSeats.length === 0) {
+          selectedSeatsElement.innerHTML = '<div class="text-muted">Aucun siège sélectionné</div>';
+          totalPriceElement.textContent = '0 FCFA';
+          continueBtn.disabled = true;
+        } else {
+          selectedSeatsElement.innerHTML = `Sièges sélectionnés : ${selectedSeats.join(', ')}`;
+          totalPriceElement.textContent = formatCFA(selectedSeats.length * seatPrice);
+          continueBtn.disabled = false;
+        }
+      }
+
+      // Graphiques pour les statistiques utilisateur
+      let userTypeChartInstance;
+      let userMonthlyChartInstance;
+      
+      function updateUserTypeChart(typeStats) {
+        const ctx = document.getElementById('userTypeChart').getContext('2d');
+        if (userTypeChartInstance) userTypeChartInstance.destroy();
+        
+        const labels = typeStats.map(item => item.type || 'Inconnu');
+        const data = typeStats.map(item => item.count);
+        
+        userTypeChartInstance = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: ['#6d4c2b', '#e6b800', '#bfa074', '#8b7355'],
+              borderWidth: 2,
+              borderColor: '#fff'
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { 
+              legend: { 
+                position: 'bottom',
+                labels: {
+                  padding: 10,
+                  usePointStyle: true
+                }
+              }
+            }
+          }
+        });
+      }
+      
+      function updateUserMonthlyChart(monthlyStats) {
+        // Créer un canvas pour le graphique mensuel si il n'existe pas
+        let monthlyCanvas = document.getElementById('userMonthlyChart');
+        if (!monthlyCanvas) {
+          const monthlySection = document.createElement('div');
+          monthlySection.className = 'col-lg-12 mb-4';
+          monthlySection.innerHTML = `
+            <div class="card dashboard-card p-4">
+              <h2 class="section-title gold">Évolution de mes Réservations</h2>
+              <canvas id="userMonthlyChart" height="180"></canvas>
+            </div>
+          `;
+          document.querySelector('.row.mb-5').appendChild(monthlySection);
+          monthlyCanvas = document.getElementById('userMonthlyChart');
+        }
+        
+        const ctx = monthlyCanvas.getContext('2d');
+        if (userMonthlyChartInstance) userMonthlyChartInstance.destroy();
+        
+        const labels = monthlyStats.map(item => {
+          const [year, month] = item.month.split('-');
+          const monthNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+          return `${monthNames[parseInt(month) - 1]} ${year}`;
+        });
+        const reservationsData = monthlyStats.map(item => item.reservations);
+        const spentData = monthlyStats.map(item => item.spent);
+        
+        userMonthlyChartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Réservations',
+              data: reservationsData,
+              borderColor: '#6d4c2b',
+              backgroundColor: 'rgba(109, 76, 43, 0.1)',
+              yAxisID: 'y'
+            }, {
+              label: 'Dépenses (FCFA)',
+              data: spentData,
+              borderColor: '#e6b800',
+              backgroundColor: 'rgba(230, 184, 0, 0.1)',
+              yAxisID: 'y1'
+            }]
+          },
+          options: {
+            responsive: true,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            plugins: { 
+              legend: { 
+                position: 'top',
+                labels: {
+                  usePointStyle: true
+                }
+              }
+            },
+            scales: {
+              x: {
+                display: true,
+                title: {
+                  display: true,
+                  text: 'Mois'
+                }
+              },
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                  display: true,
+                  text: 'Réservations'
+                }
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                title: {
+                  display: true,
+                  text: 'Dépenses (FCFA)'
+                },
+                grid: {
+                  drawOnChartArea: false,
+                },
+              }
+            }
+          }
+        });
+      }
+
+      // Continuer vers le formulaire de réservation
+      document.getElementById('continueBtn').addEventListener('click', function() {
+        document.getElementById('bookingSection').style.display = '';
+        document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth' });
+      });
+      
+      // Soumission du formulaire de réservation
+      document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const comments = document.getElementById('comments').value;
+        
+        if (!firstName || !lastName || !email || !phone) {
+          showToast('Veuillez remplir tous les champs obligatoires', 'warning');
+          return;
+        }
+        
+        try {
+          const response = await fetch('http://localhost:3000/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              tripId: selectedTrip,
+              date: '2024-07-01',
+              seats: selectedSeats,
+              firstName,
+              lastName,
+              email,
+              phone,
+              comments
+            })
+          });
+          
+          const result = await response.json();
+          if (result.success) {
+            showConfirmation(firstName, lastName, email, result.bookingRef);
+            showToast('Réservation confirmée avec succès !', 'success');
+          } else {
+            showToast('Erreur lors de la réservation : ' + result.message, 'danger');
+          }
+        } catch (e) {
+          showToast('Erreur lors de la réservation.', 'danger');
+        }
+      });
+      
+      // Affichage de la confirmation
+      function showConfirmation(firstName, lastName, email, bookingRef) {
+        const confirmationDetails = document.getElementById('confirmationDetails');
+        confirmationDetails.innerHTML = `
+          <div class="text-start">
+            <div><b>Référence :</b> ${bookingRef}</div>
+            <div><b>Passager :</b> ${firstName} ${lastName}</div>
+            <div><b>Email :</b> ${email}</div>
+            <div><b>Sièges :</b> ${selectedSeats.join(', ')}</div>
+            <div><b>Total :</b> ${formatCFA(selectedSeats.length * seatPrice)}</div>
+          </div>
+        `;
+        
+        document.getElementById('resultsSection').style.display = 'none';
+        document.getElementById('seatSection').style.display = 'none';
+        document.getElementById('bookingSection').style.display = 'none';
+        document.getElementById('confirmationSection').style.display = '';
+        document.getElementById('confirmationSection').scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Fonction pour réinitialiser le flow de réservation
+      function resetReservationFlow() {
+        document.getElementById('resultsSection').style.display = 'none';
+        document.getElementById('seatSection').style.display = 'none';
+        document.getElementById('bookingSection').style.display = 'none';
+        document.getElementById('confirmationSection').style.display = 'none';
+        document.getElementById('bookingForm').reset();
+        selectedTrip = null;
+        selectedSeats = [];
+        seatPrice = 0;
+        occupiedSeats = [];
+      }
+      
+      // Rendre la fonction accessible globalement
+      window.resetReservationFlow = resetReservationFlow;
+      
+      // Tri du tableau
+      window.sortTable = function(n) {
+        var table = document.getElementById("reservationTable");
+        var rows = Array.from(table.rows).slice(1);
+        var asc = table.asc = !table.asc;
+        rows.sort(function(a, b) {
+          return asc
+            ? a.cells[n].innerText.localeCompare(b.cells[n].innerText)
+            : b.cells[n].innerText.localeCompare(a.cells[n].innerText);
+        });
+        rows.forEach(row => table.tBodies[0].appendChild(row));
+      }
+      
+      // Déconnexion
+      window.logout = function() {
+        fetch('http://localhost:3000/logout', { method: 'POST', credentials: 'include' })
+          .then(() => window.location.href = 'login.html');
+      }
+      
+      // Fonctions pour afficher les différentes sections de réservation
+      window.showBusReservation = function() {
+        document.getElementById('hotelSection').style.display = 'none';
+        document.getElementById('carSection').style.display = 'none';
+        document.getElementById('resultsSection').style.display = '';
+        document.getElementById('seatSection').style.display = 'none';
+        document.getElementById('bookingSection').style.display = 'none';
+        document.getElementById('confirmationSection').style.display = 'none';
+        resetReservationFlow();
+      }
+      
+      window.showHotelReservation = function() {
+        document.getElementById('hotelSection').style.display = '';
+        document.getElementById('carSection').style.display = 'none';
+        document.getElementById('resultsSection').style.display = 'none';
+        document.getElementById('seatSection').style.display = 'none';
+        document.getElementById('bookingSection').style.display = 'none';
+        document.getElementById('confirmationSection').style.display = 'none';
+        resetHotelFlow();
+      }
+      
+      window.showCarReservation = function() {
+        document.getElementById('hotelSection').style.display = 'none';
+        document.getElementById('carSection').style.display = '';
+        document.getElementById('resultsSection').style.display = 'none';
+        document.getElementById('seatSection').style.display = 'none';
+        document.getElementById('bookingSection').style.display = 'none';
+        document.getElementById('confirmationSection').style.display = 'none';
+        resetCarFlow();
+      }
+      
+      // Fonctions de réinitialisation
+      window.resetHotelFlow = function() {
+        document.getElementById('hotelResults').style.display = 'none';
+        document.getElementById('roomSelection').style.display = 'none';
+        document.getElementById('hotelBookingForm').style.display = 'none';
+        document.getElementById('hotelSearchForm').reset();
+        document.getElementById('hotelReservationForm').reset();
+        selectedHotel = null;
+        selectedRoom = null;
+      }
+      
+      window.resetCarFlow = function() {
+        document.getElementById('carResults').style.display = 'none';
+        document.getElementById('carBookingForm').style.display = 'none';
+        document.getElementById('carSearchForm').reset();
+        document.getElementById('carReservationForm').reset();
+        selectedCar = null;
+      }
+      
+      // Variables globales pour les réservations
+      let selectedHotel = null;
+      let selectedRoom = null;
+      let selectedCar = null;
+      
+      // Gestionnaire de recherche d'hôtels
+      document.getElementById('hotelSearchForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const city = document.getElementById('hotelCity').value;
+        const checkIn = document.getElementById('hotelCheckIn').value;
+        const checkOut = document.getElementById('hotelCheckOut').value;
+        const guests = document.getElementById('hotelGuests').value;
+        
+        if (!checkIn || !checkOut) {
+          showToast('Veuillez sélectionner les dates d\'arrivée et de départ', 'warning');
+          return;
+        }
+        
+        try {
+          const params = new URLSearchParams({
+            city: city,
+            checkIn: checkIn,
+            checkOut: checkOut,
+            guests: guests
+          });
+          
+          const response = await fetch(`http://localhost:3000/api/hotels?${params}`, {
+            credentials: 'include'
+          });
+          
+          const hotels = await response.json();
+          
+          if (hotels.length === 0) {
+            showToast('Aucun hôtel disponible pour vos critères', 'info');
+            return;
+          }
+          
+          displayHotels(hotels);
+          document.getElementById('hotelResults').style.display = '';
+          document.getElementById('roomSelection').style.display = 'none';
+          document.getElementById('hotelBookingForm').style.display = 'none';
+        } catch (error) {
+          console.error('Erreur lors de la recherche d\'hôtels:', error);
+          showToast('Erreur lors de la recherche d\'hôtels', 'danger');
+        }
+      });
+      
+      // Affichage des hôtels
+      function displayHotels(hotels) {
+        const hotelList = document.getElementById('hotelList');
+        hotelList.innerHTML = hotels.map(hotel => `
+          <div class="col-md-6 mb-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">${hotel.name}</h5>
+                <p class="card-text">
+                  <i class="bi bi-geo-alt"></i> ${hotel.city}<br>
+                  <i class="bi bi-star-fill text-warning"></i> ${hotel.rating}/5<br>
+                  <i class="bi bi-people"></i> Jusqu'à ${hotel.capacity} personnes<br>
+                  <i class="bi bi-tag"></i> À partir de ${formatCFA(hotel.price_per_night)}/nuit
+                </p>
+                <p class="card-text"><small class="text-muted">${hotel.amenities}</small></p>
+                <button class="btn btn-primary" onclick="selectHotel(${hotel.id})">
+                  Voir les chambres
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // Sélection d'un hôtel
+      window.selectHotel = async function(hotelId) {
+        selectedHotel = hotelId;
+        
+        try {
+          const checkIn = document.getElementById('hotelCheckIn').value;
+          const checkOut = document.getElementById('hotelCheckOut').value;
+          const guests = document.getElementById('hotelGuests').value;
+          
+          const params = new URLSearchParams({
+            checkIn: checkIn,
+            checkOut: checkOut,
+            guests: guests
+          });
+          
+          const response = await fetch(`http://localhost:3000/api/hotels/${hotelId}/rooms?${params}`, {
+            credentials: 'include'
+          });
+          
+          const rooms = await response.json();
+          
+          if (rooms.length === 0) {
+            showToast('Aucune chambre disponible pour vos critères', 'info');
+            return;
+          }
+          
+          displayRooms(rooms);
+          document.getElementById('roomSelection').style.display = '';
+        } catch (error) {
+          console.error('Erreur lors de la récupération des chambres:', error);
+          showToast('Erreur lors de la récupération des chambres', 'danger');
+        }
+      }
+      
+      // Affichage des chambres
+      function displayRooms(rooms) {
+        const roomList = document.getElementById('roomList');
+        roomList.innerHTML = rooms.map(room => `
+          <div class="col-md-4 mb-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 class="card-title">${room.type}</h6>
+                <p class="card-text">
+                  <i class="bi bi-people"></i> ${room.capacity} personnes<br>
+                  <i class="bi bi-tag"></i> ${formatCFA(room.price_per_night)}/nuit<br>
+                  <i class="bi bi-building"></i> Étage ${room.floor}
+                </p>
+                <button class="btn btn-success" onclick="selectRoom(${room.id}, ${room.price_per_night})">
+                  Sélectionner
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // Sélection d'une chambre
+      window.selectRoom = function(roomId, pricePerNight) {
+        selectedRoom = { id: roomId, price: pricePerNight };
+        
+        const checkIn = new Date(document.getElementById('hotelCheckIn').value);
+        const checkOut = new Date(document.getElementById('hotelCheckOut').value);
+        const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+        const totalPrice = pricePerNight * nights;
+        
+        document.getElementById('hotelNights').value = nights;
+        document.getElementById('hotelTotalPrice').value = formatCFA(totalPrice);
+        document.getElementById('hotelBookingForm').style.display = '';
+      }
+      
+      // Réservation d'hôtel
+      document.getElementById('hotelReservationForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const guestName = document.getElementById('hotelGuestName').value;
+        const guestEmail = document.getElementById('hotelGuestEmail').value;
+        const guestPhone = document.getElementById('hotelGuestPhone').value;
+        const checkIn = document.getElementById('hotelCheckIn').value;
+        const checkOut = document.getElementById('hotelCheckOut').value;
+        const guests = document.getElementById('hotelGuests').value;
+        
+        if (!guestName || !guestEmail || !guestPhone) {
+          showToast('Veuillez remplir tous les champs obligatoires', 'warning');
+          return;
+        }
+        
+        try {
+          const response = await fetch('http://localhost:3000/api/hotel-bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              hotelId: selectedHotel,
+              roomId: selectedRoom.id,
+              checkIn: checkIn,
+              checkOut: checkOut,
+              guests: guests,
+              guestName: guestName,
+              guestEmail: guestEmail,
+              guestPhone: guestPhone
+            })
+          });
+          
+          const result = await response.json();
+          if (result.success) {
+            showToast(`Réservation hôtel confirmée ! Référence: ${result.bookingRef}`, 'success');
+            resetHotelFlow();
+            loadUserReservations(); // Recharger les réservations
+          } else {
+            showToast('Erreur lors de la réservation : ' + result.error, 'danger');
+          }
+        } catch (error) {
+          console.error('Erreur lors de la réservation hôtel:', error);
+          showToast('Erreur lors de la réservation hôtel', 'danger');
+        }
+      });
+      
+      // Gestionnaire de recherche de voitures
+      document.getElementById('carSearchForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const city = document.getElementById('carCity').value;
+        const pickupDate = document.getElementById('carPickupDate').value;
+        const returnDate = document.getElementById('carReturnDate').value;
+        const passengers = document.getElementById('carPassengers').value;
+        
+        if (!pickupDate || !returnDate) {
+          showToast('Veuillez sélectionner les dates de prise en charge et de retour', 'warning');
+          return;
+        }
+        
+        try {
+          const params = new URLSearchParams({
+            city: city,
+            pickupDate: pickupDate,
+            returnDate: returnDate,
+            passengers: passengers
+          });
+          
+          const response = await fetch(`http://localhost:3000/api/cars?${params}`, {
+            credentials: 'include'
+          });
+          
+          const cars = await response.json();
+          
+          if (cars.length === 0) {
+            showToast('Aucune voiture disponible pour vos critères', 'info');
+            return;
+          }
+          
+          displayCars(cars);
+          document.getElementById('carResults').style.display = '';
+          document.getElementById('carBookingForm').style.display = 'none';
+        } catch (error) {
+          console.error('Erreur lors de la recherche de voitures:', error);
+          showToast('Erreur lors de la recherche de voitures', 'danger');
+        }
+      });
+      
+      // Affichage des voitures
+      function displayCars(cars) {
+        const carList = document.getElementById('carList');
+        carList.innerHTML = cars.map(car => `
+          <div class="col-md-6 mb-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">${car.brand} ${car.model}</h5>
+                <p class="card-text">
+                  <i class="bi bi-calendar"></i> ${car.year}<br>
+                  <i class="bi bi-people"></i> ${car.seats} places<br>
+                  <i class="bi bi-gear"></i> ${car.transmission}<br>
+                  <i class="bi bi-fuel-pump"></i> ${car.fuel_type}<br>
+                  <i class="bi bi-geo-alt"></i> ${car.location}<br>
+                  <i class="bi bi-tag"></i> ${formatCFA(car.price_per_day)}/jour
+                </p>
+                <button class="btn btn-success" onclick="selectCar(${car.id}, ${car.price_per_day})">
+                  Sélectionner
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // Sélection d'une voiture
+      window.selectCar = function(carId, pricePerDay) {
+        selectedCar = { id: carId, price: pricePerDay };
+        
+        const pickupDate = new Date(document.getElementById('carPickupDate').value);
+        const returnDate = new Date(document.getElementById('carReturnDate').value);
+        const days = Math.ceil((returnDate - pickupDate) / (1000 * 60 * 60 * 24));
+        const totalPrice = pricePerDay * days;
+        
+        document.getElementById('carDays').value = days;
+        document.getElementById('carTotalPrice').value = formatCFA(totalPrice);
+        document.getElementById('carBookingForm').style.display = '';
+      }
+      
+      // Réservation de voiture
+      document.getElementById('carReservationForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const driverName = document.getElementById('carDriverName').value;
+        const driverLicense = document.getElementById('carDriverLicense').value;
+        const driverPhone = document.getElementById('carDriverPhone').value;
+        const pickupLocation = document.getElementById('carPickupLocation').value;
+        const returnLocation = document.getElementById('carReturnLocation').value;
+        const pickupDate = document.getElementById('carPickupDate').value;
+        const returnDate = document.getElementById('carReturnDate').value;
+        
+        if (!driverName || !driverLicense || !driverPhone || !pickupLocation || !returnLocation) {
+          showToast('Veuillez remplir tous les champs obligatoires', 'warning');
+          return;
+        }
+        
+        try {
+          const response = await fetch('http://localhost:3000/api/car-bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              carId: selectedCar.id,
+              pickupDate: pickupDate,
+              returnDate: returnDate,
+              pickupLocation: pickupLocation,
+              returnLocation: returnLocation,
+              driverName: driverName,
+              driverLicense: driverLicense,
+              driverPhone: driverPhone
+            })
+          });
+          
+          const result = await response.json();
+          if (result.success) {
+            showToast(`Location de voiture confirmée ! Référence: ${result.bookingRef}`, 'success');
+            resetCarFlow();
+            loadUserReservations(); // Recharger les réservations
+          } else {
+            showToast('Erreur lors de la location : ' + result.error, 'danger');
+          }
+        } catch (error) {
+          console.error('Erreur lors de la location de voiture:', error);
+          showToast('Erreur lors de la location de voiture', 'danger');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
