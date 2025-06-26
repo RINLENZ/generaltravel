@@ -19,15 +19,13 @@ const port = process.env.PORT || 3000; // Le port sur lequel votre serveur va é
 app.use(express.json()); // Permet à Express de lire les corps de requêtes JSON
 app.use(cors({
     origin: [
-        'http://localhost:5500', 
+        'http://localhost:5500',
         'http://127.0.0.1:5500',
-        'https://generaltravel-1.onrender.com', // Domaine frontend Render
-        'https://your-frontend-domain.vercel.app',
-        'https://your-frontend-domain.netlify.app'
+        'https://general-travel-frontend.onrender.com'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-})); // Active CORS pour permettre à votre frontend de communiquer avec ce backend
+}));
 app.use(session({
     secret: process.env.SESSION_SECRET || 'votre_secret_ultra_secret',
     resave: false,
