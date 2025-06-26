@@ -1,10 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "serveur.js",
+  "main": "serveur_postgresql.js",
   "scripts": {
-    "start": "node serveur.js",
-    "dev": "nodemon serveur.js",
+    "start": "node serveur_postgresql.js",
+    "dev": "nodemon serveur_postgresql.js",
     "build": "echo 'Build completed'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +18,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
-    "mysql2": "^3.14.1"
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
