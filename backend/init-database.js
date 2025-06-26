@@ -23,7 +23,7 @@ async function initDatabase() {
         
         console.log('📝 Exécution du script SQL...');
         
-        // Diviser le script en commandes individuelles
+        // Découper le script en commandes individuelles (en gardant l'ordre)
         const commands = sqlContent
             .split(';')
             .map(cmd => cmd.trim())
@@ -35,8 +35,13 @@ async function initDatabase() {
                     await pool.query(command);
                     console.log('✅ Commande exécutée:', command.substring(0, 50) + '...');
                 } catch (error) {
-                    // Ignorer les erreurs de contrainte (données déjà existantes)
-                    if (!error.message.includes('duplicate key') && !error.message.includes('already exists')) {
+                    // Ignorer les erreurs de contrainte ou de table déjà existante
+                    if (
+                        !error.message.includes('duplicate key') &&
+                        !error.message.includes('already exists') &&
+                        !error.message.includes('relation') &&
+                        !error.message.includes('duplicate')
+                    ) {
                         console.error('❌ Erreur:', error.message);
                     }
                 }
@@ -45,17 +50,21 @@ async function initDatabase() {
         
         console.log('🎉 Base de données initialisée avec succès !');
         
-        // Vérifier les données
-        const usersResult = await pool.query('SELECT COUNT(*) as count FROM users');
-        const tripsResult = await pool.query('SELECT COUNT(*) as count FROM trips');
-        const hotelsResult = await pool.query('SELECT COUNT(*) as count FROM hotels');
-        const carsResult = await pool.query('SELECT COUNT(*) as count FROM cars');
-        
-        console.log('📊 Statistiques :');
-        console.log(`   - Utilisateurs: ${usersResult.rows[0].count}`);
-        console.log(`   - Trajets: ${tripsResult.rows[0].count}`);
-        console.log(`   - Hôtels: ${hotelsResult.rows[0].count}`);
-        console.log(`   - Voitures: ${carsResult.rows[0].count}`);
+        // Vérifier les données (uniquement si la table users existe)
+        try {
+            const usersResult = await pool.query('SELECT COUNT(*) as count FROM users');
+            const tripsResult = await pool.query('SELECT COUNT(*) as count FROM trips');
+            const hotelsResult = await pool.query('SELECT COUNT(*) as count FROM hotels');
+            const carsResult = await pool.query('SELECT COUNT(*) as count FROM cars');
+            
+            console.log('📊 Statistiques :');
+            console.log(`   - Utilisateurs: ${usersResult.rows[0].count}`);
+            console.log(`   - Trajets: ${tripsResult.rows[0].count}`);
+            console.log(`   - Hôtels: ${hotelsResult.rows[0].count}`);
+            console.log(`   - Voitures: ${carsResult.rows[0].count}`);
+        } catch (e) {
+            console.log('ℹ️ Les tables ne sont pas encore toutes créées.');
+        }
         
     } catch (error) {
         console.error('❌ Erreur lors de l\'initialisation:', error);
