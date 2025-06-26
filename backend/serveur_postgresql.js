@@ -21,10 +21,12 @@ app.use(cors({
     origin: [
         'http://localhost:5500', 
         'http://127.0.0.1:5500',
-        'https://your-frontend-domain.vercel.app', // Remplacer par votre domaine Vercel
-        'https://your-frontend-domain.netlify.app'  // Remplacer par votre domaine Netlify
+        'https://generaltravel-1.onrender.com', // Domaine frontend Render
+        'https://your-frontend-domain.vercel.app',
+        'https://your-frontend-domain.netlify.app'
     ],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 })); // Active CORS pour permettre à votre frontend de communiquer avec ce backend
 app.use(session({
     secret: process.env.SESSION_SECRET || 'votre_secret_ultra_secret',
@@ -32,6 +34,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
+
+// Gérer les requêtes préflight OPTIONS pour toutes les routes
+app.options('*', cors());
 
 // 5. Configurer le pool de connexion PostgreSQL
 const pool = new Pool({
