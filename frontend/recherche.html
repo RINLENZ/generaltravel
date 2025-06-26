@@ -321,7 +321,7 @@ document.querySelector('.search-button').addEventListener('click', async functio
   confirmationSection.style.display = 'none';
   document.getElementById('tripResults').innerHTML = 'Chargement...';
   try {
-    const response = await fetch(`http://localhost:3000/api/trips?departure=${departure}&destination=${destination}&date=${date}`);
+    const response = await fetch(`https://general-travel-backend.onrender.com/api/trips?departure=${departure}&destination=${destination}&date=${date}`);
     trips = await response.json();
     if (!trips.length) {
       document.getElementById('tripResults').innerHTML = '<div>Aucun trajet trouvé.</div>';
@@ -378,7 +378,7 @@ async function selectTrip(tripId, price) {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:3000/api/trips/${tripId}/seats?date=${date}`);
+    const response = await fetch(`https://general-travel-backend.onrender.com/api/trips/${tripId}/seats?date=${date}`);
     let seats = await response.json();
     if (!Array.isArray(seats)) seats = [];
     occupiedSeats = seats;
@@ -475,7 +475,7 @@ document.getElementById('bookingForm').addEventListener('submit', async function
     return;
   }
   try {
-    const response = await fetch('http://localhost:3000/api/bookings', {
+    const response = await fetch('https://general-travel-backend.onrender.com/api/bookings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -526,7 +526,7 @@ document.getElementById('btnShowAllTripsUser').addEventListener('click', async f
   confirmationSection.style.display = 'none';
   document.getElementById('tripResults').innerHTML = 'Chargement...';
   try {
-    const response = await fetch('http://localhost:3000/api/trips');
+    const response = await fetch('https://general-travel-backend.onrender.com/api/trips');
     trips = await response.json();
     if (!trips.length) {
       document.getElementById('tripResults').innerHTML = '<div>Aucun trajet trouvé.</div>';

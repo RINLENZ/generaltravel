@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Fonction de connexion (à appeler lors du submit du formulaire de login)
 function login(email, password) {
-  fetch('http://localhost:3000/login', {
+  fetch('https://general-travel-backend.onrender.com/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

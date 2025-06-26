@@ -422,7 +422,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Affichage de l'email utilisateur
-      fetch('http://localhost:3000/profile', { credentials: 'include' })
+      fetch('https://general-travel-backend.onrender.com/profile', { credentials: 'include' })
         .then(res => res.json())
         .then(data => {
           if (data.logged && data.user) {
@@ -434,7 +434,7 @@
         });
 
       // Statistiques utilisateur
-      fetch('http://localhost:3000/api/user/stats', { credentials: 'include' })
+      fetch('https://general-travel-backend.onrender.com/api/user/stats', { credentials: 'include' })
         .then(res => res.json())
         .then(stats => {
           // Statistiques principales
@@ -484,7 +484,7 @@
 
       // Récupérer et afficher les réservations utilisateur
       function loadUserReservations() {
-        fetch('http://localhost:3000/api/user/reservations', { credentials: 'include' })
+        fetch('https://general-travel-backend.onrender.com/api/user/reservations', { credentials: 'include' })
           .then(res => res.json())
           .then(reservations => {
             const tbody = document.querySelector('#reservationTable tbody');
@@ -535,7 +535,7 @@
           const destination = tr.children[2].textContent;
           
           if (confirm(`Êtes-vous sûr de vouloir supprimer la réservation pour "${destination}" ?`)) {
-            fetch(`http://localhost:3000/api/user/reservations/${id}`, {
+            fetch(`https://general-travel-backend.onrender.com/api/user/reservations/${id}`, {
               method: 'DELETE', 
               credentials: 'include'
             })
@@ -608,7 +608,7 @@
               return;
             }
             
-            fetch(`http://localhost:3000/api/user/reservations/${id}`, {
+            fetch(`https://general-travel-backend.onrender.com/api/user/reservations/${id}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               credentials: 'include',
@@ -655,7 +655,7 @@
         document.getElementById('tripResults').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div><div>Chargement...</div></div>';
         
         try {
-          const response = await fetch('http://localhost:3000/api/trips');
+          const response = await fetch('https://general-travel-backend.onrender.com/api/trips');
           const trips = await response.json();
           
           if (!trips.length) {
@@ -691,7 +691,7 @@
         
         // Récupère les sièges occupés depuis le backend
         try {
-          const response = await fetch(`http://localhost:3000/api/trips/${tripId}/seats?date=2024-07-01`);
+          const response = await fetch(`https://general-travel-backend.onrender.com/api/trips/${tripId}/seats?date=2024-07-01`);
           occupiedSeats = await response.json();
         } catch (e) {
           occupiedSeats = [];
@@ -927,7 +927,7 @@
         }
         
         try {
-          const response = await fetch('http://localhost:3000/api/bookings', {
+          const response = await fetch('https://general-travel-backend.onrender.com/api/bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -1006,7 +1006,7 @@
       
       // Déconnexion
       window.logout = function() {
-        fetch('http://localhost:3000/logout', { method: 'POST', credentials: 'include' })
+        fetch('https://general-travel-backend.onrender.com/logout', { method: 'POST', credentials: 'include' })
           .then(() => window.location.href = 'login.html');
       }
       
@@ -1087,7 +1087,7 @@
             guests: guests
           });
           
-          const response = await fetch(`http://localhost:3000/api/hotels?${params}`, {
+          const response = await fetch(`https://general-travel-backend.onrender.com/api/hotels?${params}`, {
             credentials: 'include'
           });
           
@@ -1147,7 +1147,7 @@
             guests: guests
           });
           
-          const response = await fetch(`http://localhost:3000/api/hotels/${hotelId}/rooms?${params}`, {
+          const response = await fetch(`https://general-travel-backend.onrender.com/api/hotels/${hotelId}/rooms?${params}`, {
             credentials: 'include'
           });
           
@@ -1219,7 +1219,7 @@
         }
         
         try {
-          const response = await fetch('http://localhost:3000/api/hotel-bookings', {
+          const response = await fetch('https://general-travel-backend.onrender.com/api/hotel-bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -1271,7 +1271,7 @@
             passengers: passengers
           });
           
-          const response = await fetch(`http://localhost:3000/api/cars?${params}`, {
+          const response = await fetch(`https://general-travel-backend.onrender.com/api/cars?${params}`, {
             credentials: 'include'
           });
           
@@ -1348,7 +1348,7 @@
         }
         
         try {
-          const response = await fetch('http://localhost:3000/api/car-bookings', {
+          const response = await fetch('https://general-travel-backend.onrender.com/api/car-bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
